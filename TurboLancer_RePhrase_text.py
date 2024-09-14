@@ -4,7 +4,7 @@ from google.generativeai.types import generation_types
 
 def now(input_text):
     # Configure the Generative AI API
-    genai.configure(api_key="AIzaSyA1ea0SdwYbl7r7S6mLjAOtpAoSbpq-XEM")
+    genai.configure(api_key="**************************")
 
     # Set up the Generative AI model
     generation_config = {
