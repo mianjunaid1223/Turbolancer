@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TurboLancer Seller Dashboard | {{name.capitalize()}}</title>
+  <link rel="icon" type="image/png" href="/static/icon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/static/toast.css" />
+  <script src="/static/toast.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="/static/tailwind.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <link rel="stylesheet" href="/static/db.css">
+</head>
+
+<body>
+  <div class="drawer drawer-mobile">
+    <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col">
+      <!-- Navbar -->
+      <div class="w-full navbar bg-base-300">
+        <div class="flex-none lg:hidden">
+          <label for="my-drawer" class="btn btn-square btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              class="inline-block w-6 h-6 stroke-current">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </label>
+        </div>
+        <div class="flex-1 px-2 mx-2">
+          <img src="/static/dark_logo.png" alt="TurboLancer" class="logo" />
+        </div>
+        <div class="flex-none">
+          <!-- Notification Dropdown -->
+          <div class="dropdown">
+            <div tabindex="2" role="button" style="background: none; border: none; outline: none; color: #232323;"
+              class="btn m-1 notification">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 have" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <sup class="badge badge-success tot" style="background-color: #18ca00; color: #fff;">{{um | length}}</sup>
+            </div>
+            <ul style="border-radius: 14px; transform: translateX(-100px);" tabindex="2" class="dropdown-content z-[1] menu p-1 shadow bg-base-100 rounded-box w-60"
+              >
+              {% if um %}
+              {% for i in um %}
+              <li class="not" onclick="details(`/chat/{{i['room']}}`,true); document.querySelector('.tot').innerText = parseInt(document.querySelector('.tot').innerText) -1; this.remove()">
+                <a  style="width: 100%; ">
+                  <img src="{{ i['img'] }}" alt="{{ i['username'] }}" class="w-6 h-6 rounded-full">
+                  {{ i['username'] }}
+                  <span class="badge badge-success bg-green-500 rounded-full" style="background: #18ca00; color: #fff;">{{i['message_count']}}</span>
+                </a>
+              </li>
+              {% endfor %}
+              {% else %}
+              <li class="not" style="background-color: #f1f1f1; padding: 8px;">
+                Nothing to show
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <!-- User Dropdown -->
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" class="m-1 btn btn-ghost btn-circle avatar">
+              <div class="w-10 rounded-full">
+                <img src="{{image}}" alt="{{ name.upper() }}" />
+              </div>
+            </div>
+            <ul tabindex="0" style="border-radius: 14px;" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+              <li>
+                <a class="justify-between" id="anchor" href="{{aclink}}">
+                  Account
+                </a>
+              </li>
+              <li>
+                <a href="{{allink}}">
+                  Switch to buyer account
+                </a>
+              </li>
+              <li>
+                <a id="LogOutButton">
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page">
+        <!-- Page content -->
+        <div class="view">
+          <div class="profile-header">
+            <div class="profile-initials">
+              <img onclick="openit(this)" src="{{image}}" alt="{{ name.upper() }}">
+            </div>
+            <div class="profile-info">
+              <h2 class="profile-name"> {{ name.upper() }}</h2>
+              <p class="profile-details">{{ email }} , {{ ph }}, <i class="fas ico fa-globe"></i> {{ country }}
+              </p>
+              <a href="{{aclink}}" target="_blank" rel="noopener noreferrer">
+                <p class="profile-role" style="color: #00b800; text-decoration: underline; text-transform: lowercase;">
+                  {{ tag }}</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="view">
+          <div class="profile-stats stats shadow" style="width: 100%">
+            <div class="stat">
+              <div class="stat-title">
+                <i class="fas ico fa-dollar-sign"></i> Total Earnings
+              </div>
+              <div class="stat-value">{% if earnings %}{{ earnings | sum }}{% else %}0{% endif %}
+              </div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">
+                <i class="fas ico fa-box"></i> Total Catalog Items
+              </div>
+              <div class="stat-value">{{ total_catalog_items }}</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">
+                <i class="fas ico fa-project-diagram"></i> Total Projects
+              </div>
+              <div class="stat-value">{{ total_projects }}</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">
+                <i class="fas ico fa-star"></i> User Rating
+              </div>
+              <div class="stat-value">{{ rating }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view">
+          <div class="w-full bg-white rounded-lg shadow light:bg-gray-800 p-4 md:p-6">
+            <div class="flex justify-between">
+              <div>
+                <h1 class="text-3xl font-bold mb-4">
+                  Earnings <tag class="stat-title">(per month)</tag>
+                </h1>
+              </div>
+            </div>
+
+            <div id="labels-chart" class="px-2.5"></div>
+          </div>
+        </div>
+        <div class="view">
+          <h1 class="text-3xl font-bold mt-8 mb-4">Orders</h1>
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>client name</th>
+                  <th>complitation</th>
+                  <th>DeadLine </th>
+                  <th>Status</th>
+                  <th> </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tr">
+                  <th style=" height: 62px; padding-left: 4px;" class="dis"><img onclick="openit(this)"
+                      src="/static/4543.png" alt="">Junaid</th>
+                  <td>
+                    <div class="dis">
+                      <progress class="progress progress-success w-40" value="60" max="100"></progress>
+
+                      <strong class="percent">60%</strong>
+                    </div>
+                  </td>
+                  <td>05/15/2024</td>
+                  <td>
+                    <span style="min-width: 100px" class="badge badge-success">On Track</span>
+                  </td>
+                  <td>
+                    <label for="details" class="openmodal">Show details</label>
+                  </td>
+                </tr>
+                <!-- Add more rows as needed -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="iframe page" style="display: none; "><iframe src="" style="width: 100%; height: 88vh;"></iframe></div>
+    </div>
+    <div class="drawer-side">
+      <label for="my-drawer" class="drawer-overlay"></label>
+      <ul class="menu p-4 w-80 bg-base-200 text-base-content">
+        <li class="menu-title">
+          <span>Menu</span>
+        </li>
+        <li class="Mactive">
+          <a onclick="hideiframe(this)">Dashboard</a>
+        </li>
+        <li><a href="{{aclink}}" id="anchor">Profile</a></li>
+        <li><a>Trends</a></li>
+        <li><a>Projects</a></li>
+        <li><a onclick="showiframe(this)" data-link="/catalogue/{{_id}}/d">Catalogs</a></li>
+        <li><a onclick="showiframe(this)" data-link="/messenger">Messages</a></li>
+        <li><a id="LogOutButton">LogOUT</a></li>
+      </ul>
+    </div>
+  </div>
+  <input type="checkbox" id="details" class="modal-toggle" />
+  <div class="modal h-full" role="dialog">
+    <div class="modal-box w-11/12 h-full max-w-5xl">
+      <iframe class="w-full" style="height: 87%; border-radius: 13px;"
+        src="http://127.0.0.1:5500/template/technology.html" frameborder="0"></iframe>
+      <div class="modal-action">
+        <label for="details" class="btn">Close!</label>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+  <script>
+
+
+function fetchDataAndAppend(userId) {
+  const dropdownContent = document.querySelector('.dropdown-content');
+  let previousData = {% if um %} '{{um}}' {% else %} null {% endif %};
+  console.log(previousData)
+  function makeRequest() {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: userId })
+    };
+
+    fetch('/notification', requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Network response was not ok.');
+        }
+      })
+      .then(data => {
+        if (JSON.stringify(data) === JSON.stringify(previousData)) {
+          console.log(JSON.stringify(data) === JSON.stringify(previousData))
+          return;
+        }
+
+        // Clear the existing content
+        dropdownContent.innerHTML = '';
+        console.log(data.um)
+        if (data.um && data.um.length > 0) {
+            document.querySelector('.tot').innerText = data.um.length
+          data.um.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('not');
+            listItem.onclick = () => {
+              details(`/chat/${item.room}`, true);
+              listItem.remove();
+            };
+
+            const anchor = document.createElement('a');
+            anchor.style.width = '100%';
+
+            const image = document.createElement('img');
+            image.src = item.img;
+            image.alt = item.username;
+            image.classList.add('w-6', 'h-6', 'rounded-full');
+
+            const username = document.createElement('span');
+            username.textContent = item.username;
+
+            const messageCount = document.createElement('span');
+            messageCount.classList.add('bg-green-500', 'rounded-full');
+            messageCount.style.color = "#fff"
+            messageCount.style.background = "#18ca00";
+            messageCount.style.color= " #fff";
+            messageCount.textContent = item.message_count;
+
+            anchor.appendChild(image);
+            anchor.appendChild(username);
+            anchor.appendChild(messageCount);
+            listItem.appendChild(anchor);
+            dropdownContent.appendChild(listItem);
+            showNotification('TurboLancer', {
+    body: item.message_count > 1 ? "You have received "+item.message_count+" new messages from " +item.username : "You have received a new message from " + item.username,
+    badge: 'https://turbolancer.com/icon.png',
+    data: { url: `/chat/${item.room}` },
+    onClick: function(event) {
+        event.preventDefault();
+        window.open(this.data.url, '_blank');
+    }
+});
+          });
+
+        } else {
+          document.querySelector('.tot').innerText = 0
+          const listItem = document.createElement('li');
+          listItem.classList.add('not');
+          listItem.style.backgroundColor = '#f1f1f1';
+          listItem.style.padding="8px"
+          listItem.textContent = 'Nothing to show';
+          dropdownContent.appendChild(listItem);
+        }
+
+        previousData = data;
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+
+  setInterval(makeRequest, 10000);
+}
+fetchDataAndAppend('{{_id}}');
+    const channel = new BroadcastChannel('live.TurboLancer');
+    channel.onmessage = (event) => {
+      details(event.data)
+    }
+
+    function showiframe(element) {
+      document.querySelector('.Mactive').classList.remove('Mactive')
+      element.parentElement.classList.add('Mactive')
+      const link = element.getAttribute('data-link');
+      const iframe = document.querySelector('.iframe iframe');
+      if (!(iframe.src.includes(link))) {
+        iframe.src = link;
+      }
+      else {
+        iframe.src
+      }
+
+      document.querySelectorAll('#page').forEach(item => {
+        item.style.opacity = '0';
+        setTimeout(() => {
+          item.style.display = 'none';
+        }, 400);
+      });
+
+      const iframeContainer = document.querySelector('.iframe');
+      iframeContainer.style.display = 'block';
+      setTimeout(() => {
+        iframeContainer.style.opacity = '1';
+      }, 400);
+    }
+    function hideiframe(element) {
+      document.querySelector('.Mactive').classList.remove('Mactive');
+      element.parentElement.classList.add('Mactive')
+
+      document.querySelectorAll('#page').forEach(item => {
+        item.style.display = 'block';
+        setTimeout(() => {
+          item.style.opacity = '1';
+        }, 400);
+      });
+
+      const iframeContainer = document.querySelector('.iframe');
+      iframeContainer.style.opacity = '0';
+      setTimeout(() => {
+        iframeContainer.style.display = 'none';
+      }, 400);
+    }
+    const anchor = document.querySelectorAll('#anchor');
+    anchor.forEach(element => {
+      element.href += `?referrer=${encodeURIComponent(btoa(window.location.href))}`;
+      console.log('{{ year }}')
+
+    });
+    const earnings = {{ earnings | tojson | safe }}
+    const options = {
+      // set the labels option to true to show the labels on the X and Y axis
+      xaxis: {
+        show: true,
+        categories: getMonthsArray('{{ year }}'),
+        labels: {
+          show: true,
+          style: {
+            fontFamily: "Inter, sans-serif",
+            cssClass: "text-xs font-normal fill-gray-500 dark:fill-gray-400",
+          },
+        },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        show: true,
+        labels: {
+          show: true,
+          style: {
+            fontFamily: "Inter, sans-serif",
+            cssClass: "text-xs font-normal fill-gray-500 dark:fill-gray-400",
+          },
+          formatter: function (value) {
+            return "$" + value;
+          },
+        },
+      },
+      series: [
+        {
+          name: "Earnings",
+          data: earnings,
+          color: "#8ed884",
+        }],
+
+
+      chart: {
+        sparkline: {
+          enabled: false,
+        },
+        height: "100%",
+        width: "100%",
+        type: "area",
+        fontFamily: "Inter, sans-serif",
+        dropShadow: {
+          enabled: false,
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      tooltip: {
+        enabled: true,
+        x: {
+          show: false,
+        },
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          opacityFrom: 0.55,
+          opacityTo: 0,
+          shade: "#8ed884",
+          gradientToColors: ["#8ed884"],
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        width: 6,
+      },
+      legend: {
+        show: false,
+      },
+      grid: {
+        show: false,
+      },
+    };
+
+    if (
+      document.getElementById("labels-chart") &&
+      typeof ApexCharts !== "undefined"
+    ) {
+      const chart = new ApexCharts(
+        document.getElementById("labels-chart"),
+        options
+      );
+      chart.render();
+    }
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+    <link rel="stylesheet" href="style.css">
+    <title>Turbolancer</title>
+    <link rel="icon" type="image/png" href="/static/icon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 10px;
+            background-color: #f1f1f1;
+            animation-name: w;
+            animation-duration: 1s;
+            animation-iteration-count: 1;
+        }
+
+        @keyframes w {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+
+        .container {
+            width: 400px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            /* Added for positioning the back button */
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            color: #00a56e;
+            border: none;
+            border-radius: 50%;
+            background-color: transparent;
+            cursor: pointer;
+            transition: 0.3s ease;
+
+        }
+
+        h1 {
+            text-align: center;
+            color: #00a56e;
+            margin-bottom: 30px;
+            font-size: 35px;
+            font-weight: 500;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+            color: #555;
+            background-color: transparent;
+        }
+
+        label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 16px;
+            color: #999;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        input:focus~label,
+        input:valid~label {
+            top: -20px;
+            font-size: 12px;
+            color: #00a56e;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #00a56e;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00a161;
+            color: white;
+        }
+
+        .privacy-policy {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+        }
+
+        .privacy-policy a {
+            color: #00a56e;
+            text-decoration: none;
+        }
+
+        .privacy-policy a:hover {
+            text-decoration: underline;
+        }
+
+        .signin-link {
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .signin-link a {
+            color: #00a56e;
+            text-decoration: none;
+        }
+
+        .signin-link a:hover {
+            text-decoration: underline;
+        }
+
+        .avatar-upload {
+            position: relative;
+            max-width: 205px;
+            margin: 50px auto;
+        }
+
+        .avatar-upload .avatar-edit {
+            position: absolute;
+            right: 12px;
+            z-index: 1;
+            top: 20px !important;
+        }
+
+        .avatar-upload .avatar-edit input {
+            position: absolute;
+            opacity: 0;
+            width: 34px;
+            /* Adjust the width and height as needed */
+            height: 20px;
+            margin-bottom: 0;
+            top: -13px;
+            left: 0;
+            cursor: pointer;
+        }
+
+        .avatar-upload .avatar-edit input+label {
+            display: inline-block;
+            width: 34px;
+            height: 34px;
+            margin-bottom: 0;
+            border-radius: 100%;
+            background: #FFFFFF;
+            border: 1px solid transparent;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+            font-weight: normal;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .avatar-upload .avatar-edit input+label:hover {
+            background: #f1f1f1;
+            border-color: #d6d6d6;
+        }
+
+        .avatar-upload .avatar-edit input+label:after {
+            content: "\f040";
+            font-family: 'FontAwesome';
+            color: #757575;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            margin: auto;
+        }
+
+        .avatar-upload .avatar-preview {
+            width: 192px;
+            height: 192px;
+            position: relative;
+            border-radius: 100%;
+            border: 6px solid #F8F8F8;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-upload .avatar-preview>div {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .btn-open {
+            font-size: 19px;
+            position: absolute;
+            cursor: pointer;
+            opacity: 0;
+            user-select: none;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .btn-download {
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: none;
+            background-color: #00a56e;
+            color: #fff;
+            width: 300px;
+            height: 70px;
+            transition: all 0.5s ease;
+            transform-origin: center bottom;
+            transform: scale(1);
+            position: relative;
+            overflow: hidden;
+            outline: none;
+        }
+
+        .btn-download:hover {
+            background-color: #a0a0a0;
+        }
+
+        .btn-download:before,
+        .btn-download:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn-download:after {
+            background: #040404;
+            border-radius: 5px;
+            transform: translatex(-100%);
+        }
+
+        .btn-download:focus {
+            font-size: 0;
+            height: 10px;
+            border-radius: 20px;
+            background-color: #d1d1d1;
+            animation-name: stretch;
+            animation-delay: 2s;
+            animation-duration: 01s;
+            animation-fill-mode: forwards;
+        }
+
+        .btn-download:focus+.btn-open {
+            animation-name: appear;
+            animation-delay: 4s;
+            animation-duration: 0.6s;
+            animation-fill-mode: forwards;
+        }
+
+        .btn-download:focus:after {
+            transform: translateX(0);
+            transition: transform 1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+            transition-delay: 0.8s;
+        }
+
+        @keyframes stretch {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(0.4);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(-15px);
+            }
+        }
+
+        .btn-download.with-red-background::after {
+            background-color: red;
+        }
+
+        input[type='date'] {
+            color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button class="back-button" onclick="goBack()">&#8249;</button><br>
+        <h3 style="font-size: 25px; color: red; font-weight: bold; text-align: center;" id="error"></h3>
+        <h1>Sign Up</h1>
+
+
+        <form id="signupForm" class="signup-form" action="#" method="POST">
+            <div class="avatar-upload">
+                <div class="avatar-edit">
+                    <input type="file" id="imageUpload" name="image" accept=".png, .jpg, .jpeg" title="Upload picture"
+                        required>
+                    <label for="imageUpload"></label>
+                </div>
+                <div class="avatar-preview">
+                    <div id="imagePreview"
+                        style="background-image: url(https://cdn-icons-png.flaticon.com/128/3177/3177440.png);"></div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="name" name="name" required>
+                <label for="name">Name</label>
+            </div>
+            <div class="input-group">
+                <input type="email" id="email" name="email" required>
+                <label for="email">Email</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="ps" required>
+                <label for="password">Password</label>
+            </div>
+            <div class="input-group">
+                <input type="tel" id="tel" name="ph" required>
+                <label for="tel">Phone Number</label>
+            </div>
+            <div class="input-group">
+                <input type="date" id="birthdate" name="bir" required>
+                <label for="country">Birthday</label>
+            </div>
+            <div class="input-group">
+                <input type="text" list="ganderL" id="gander" name="gan" required>
+
+                <datalist id="ganderL">
+                    <option value="Male">
+                    <option value="Female">
+                    <option value="Other...">
+                    <option value="Not interested to tell">
+                </datalist>
+                <label for="gander">Gander</label>
+            </div>
+            <div class="input-group">
+                <input type="hidden" id="userCountry" name="con" required>
+            </div>
+            <div class="content">
+                <button type="submit" class="btn-download">Sign UP</button>
+                <span class="btn-open" id="erroro">Please waite....</span>
+            </div>
+            <p class="privacy-policy">By signing up, you agree to our <a href="#">Privacy Policy</a>.</p>
+            <p class="signin-link">Already have an account? <a href="/signin">Sign in</a></p>
+        </form>
+    </div>
+
+
+
+
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imageBase64 = e.target.result;
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                    $('#imagePreview').hide();
+                    $('#imagePreview').fadeIn(650);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imageUpload").change(function () {
+            readURL(this);
+        });
+
+        $("form").submit(function (event) {
+    event.preventDefault();
+    const birthdate = document.getElementById('birthdate').value;
+
+    if (birthdate) {
+        const today = new Date();
+        const inputDate = new Date(birthdate);
+        const ageDiff = today - inputDate;
+        const age = Math.floor(ageDiff / (1000 * 60 * 60 * 24 * 365.25));
+
+        if (age >= 17) {
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "/begin_client_journey",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        document.querySelector('.btn-open').textContent = 'Sign In successful';
+                        document.querySelector('.btn-open').style.color = '#00a56e';
+                        window.location = response.redirect_url;
+                    } else if (response.error) {
+                        document.querySelector('.btn-open').textContent = response.error;
+                        document.querySelector('.btn-open').style.color = 'red';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error during signup and image upload: " + xhr.status);
+                    document.querySelector('.btn-open').textContent = 'An error occurred. Please try again.';
+                    document.querySelector('.btn-open').style.color = 'red';
+                }
+            });
+        } else {
+            document.getElementById('erroro').textContent = 'You must be at least 17 years old to SignUp.';
+        }
+    }
+});
+
+
+        // JavaScript code for hiding the modal
+        document.querySelectorAll("[data-modal-hide]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                var target = button.dataset.modalHide;
+                document.getElementById(target).classList.add("hidden");
+            });
+        });
+
+        // Function to fetch user's country based on IP address
+        function getUserCountry() {
+            fetch('http://ip-api.com/json/')
+                .then(response => response.json())
+                .then(data => {
+                    const userCountry = data.country;
+                    document.getElementById('userCountry').value = userCountry;
+                })
+                .catch(error => {
+                    console.error('Error fetching user country:', error);
+                    document.getElementById('userCountry').textContent = 'Please enter your country';
+                });
+        }
+
+        getUserCountry();
+
+
+    </script>
+
+</body>
+
+</html>

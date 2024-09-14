@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <title>TurboLancer | Redirecting</title>
+</head>
+
+<body>
+    <script>
+        function setCookie(name, value, daysToExpire) {
+            let cookie = `${name}=${encodeURIComponent(value)}; path=/`;
+
+            if (daysToExpire) {
+                const expirationDate = new Date();
+                expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+                cookie += `; expires=${expirationDate.toUTCString()}`;
+            }
+
+            document.cookie = cookie;
+        }
+        window.onload = () => {
+            var l1 = {{ keys[0]|tojson }};
+            var l2 = {{ keys[1]|tojson }};
+
+            for (var i = 0; i < l1.length; i++) {
+                console.log(`${l1[i]}: ${l2[i]}`);
+                setCookie(l1[i], l2[i], 82);
+            }
+        };
+        console.log("{{redi}}")
+        setTimeout(() => {
+            window.location = "{{redi}}";
+
+        }, 500);
+
+    </script>
+</body>
+
+</html>

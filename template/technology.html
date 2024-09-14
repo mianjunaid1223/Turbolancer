@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.5" />
+    <title>TurboLancer</title>
+    <link rel="icon" type="image/png" href="/static/icon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/static/toast.css" />
+    <script src="/static/toast.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap");
+        @import url("https://fonts.googleapis.com/css?family=Sofia");
+
+        * {
+            padding: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            -webkit-transition: all 0.4s;
+            -o-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+
+        .port {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            gap: 10px;
+            width: 90%;
+            margin-left: 5%;
+            padding: 13px;
+        }
+
+        .avatar .w-24.rounded-full {
+            box-shadow: 0 3px 10px #00000058;
+        }
+
+        .navbar {
+            width: 100%;
+            box-shadow: 0 3px 10px #0000002a;
+            border-radius: 13px;
+        }
+
+        .view {
+            border-radius: 13px;
+            padding: 10px;
+            box-shadow: 0 3px 10px #0000002a;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .stats {
+            box-shadow: 0 3px 10px #0000002a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="port">
+        <div class="avatar">
+            <div class="w-24 rounded-full">
+                <img onclick="openit(this)" src="/static/4543.png" />
+            </div>
+        </div>
+        <div class="navbar bg-base-100">
+            <div class="flex-1">
+                <a class="btn btn-ghost text-xl " style="pointer-events: none;">Mian Junaid, </a> <p class="profile-role" style="color: #00b800; text-decoration: underline;">@mianjunaid0001</p>
+            </div>
+            <div class="flex-none">
+                <a class="btn btn-ghost text-xl"> <i class="fa fa-regular fa-message"></i></a>
+            </div>
+        </div>
+
+        <div class="view">
+          <div style="width: 100%;">
+
+            <h3 class="stat-value" style="text-align: center; justify-self: baseline; align-self: baseline; font-size: 25px; margin-left: 1%;">Shoes!</h3>
+            <div class="divider"></div>
+            <p style="text-align: center; justify-self: center; align-self: center; margin-left: 1%;">If a dog chews shoes whose shoes does he choose?</p>
+
+        </div>
+        <div class="view">
+
+            <div class="stats stats-vertical lg:stats-horizontal w-full">
+
+                <div class="stat">
+                    <div class="stat-title">Price</div>
+                    <div class="stat-value">$31K</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">DeadLine</div>
+                    <div class="stat-value dead">5/18/2024</div>
+                    <div class="stat-desc rem" style="color: rgb(255, 0, 0);">(15 days from now)</div>
+
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">Status</div>
+                    <div class="stat-value" id="status">Pending</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">Client Rating</div>
+                    <div class="stat-value" id="client-rating">
+                        <i class="fa fa-star text-yellow-400"></i>
+                        <i class="fa fa-star text-yellow-400"></i>
+                        <i class="fa fa-star text-yellow-400"></i>
+                        <i class="fa fa-star-o text-yellow-400"></i>
+                        <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view">
+            <div class="progress progress-primary h-2 rounded-lg">
+                <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <h3 class="stat-value" id="comp" style="text-align: center; justify-self: baseline; align-self: baseline; font-size: 25px; margin-left: 1%;">
+                completion (30%)</h3>
+
+            <input id="range" oninput="update(this)" type="range" min="0" max="100" value="30" class="range" step="5" />
+            <div class="w-full flex justify-between text-xs px-2">
+
+                <span style="color: red;">Pending (0%)</span>
+                <span style="color: orangered;">Just begun (25%)</span>
+                <span style="color: rgb(0, 162, 226);">In progress (50%)</span>
+                <span style="color:rgb(0, 157, 157) ;">Finishing up (75%)</span>
+                <span style="color: #00ca00;">Completed (100%)</span>
+            </div>
+        </div>
+
+        <div class="view">
+            <button class="btn btn-primary" id="deliver-btn">Deliver Project</button>
+            <div id="deliver-message" style="display: none; color: green; text-align: center;">Project Delivered!</div>
+        </div>
+
+        <div class="view">
+            <i class="fa fa-file" id="file-indicator" style="display: none; color: #00b800;"></i> Files Shared
+        </div>
+    </div>
+<script>
+  function daysUntilDeadline(deadlineDateString) {
+    // Existing logic to calculate days until deadline and update color
+
+    // Assuming the deadline date is in the format "mm/dd/yyyy"
+    const [month, day, year] = deadlineDateString.split('/');
+    const deadline = new Date(+year, month - 1, +day);
+
+    const today = new Date();
+
+    // Extract date components
+    const deadlineDay = deadline.getDate();
+    const deadlineMonth = deadline.getMonth();
+    const deadlineYear = deadline.getFullYear();
+    const todayDay = today.getDate();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
+
+    // Compare dates
+    if (deadlineYear < todayYear || (deadlineYear === todayYear && deadlineMonth < todayMonth) || (deadlineYear === todayYear && deadlineMonth === todayMonth && deadlineDay < todayDay)) {
+        return ["(Deadline surpassed)", 'black'];
+    }
+
+    // Calculate the difference in days
+    const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+        return [ "(Today)",'red'];
+    } else if (diffDays === 1) {
+        return ["(One day left)",'red'];
+    } else {
+        return [`(${diffDays} days from now)`,'black'];
+    }
+}
+
+// Set the deadline date
+const deadlineDateString = document.querySelector('.dead').innerText;
+document.querySelector('.rem').innerText = daysUntilDeadline(deadlineDateString)[0];
+document.querySelector('.rem').style.color = daysUntilDeadline(deadlineDateString)[1];
+
+const arr = ['Pending', 'Just begun', 'In progress', 'Working on it', 'Finishing up', 'Completed'];
+const stat = document.getElementById('status');
+const range = document.getElementById('range');
+const progressBar = document.getElementById('progress-bar');
+const deliverBtn = document.getElementById('deliver-btn');
+const deliverMessage = document.getElementById('deliver-message');
+const fileIndicator = document.getElementById('file-indicator');
+
+function update(input) {
+    const v = parseInt(input.value);
+    document.getElementById('comp').innerText = `completion (${v}%)`;
+    progressBar.style.width = `${v}%`;
+
+    if (v === 0) {
+        stat.innerText = arr[0];
+        stat.style.color = '#121212';
+    } else if (0 < v && v <= 25) {
+        stat.innerText = arr[1];
+        stat.style.color = '#121212'; // Change the color as desired
+    } else if (25 < v && v <= 50) {
+        stat.innerText = arr[2];
+        stat.style.color = '#121212'; // Change the color as desired
+    } else if (50 < v && v <= 75) {
+        stat.innerText = arr[3];
+        stat.style.color = '#121212'; // Change the color as desired
+    } else if (75 < v && v < 100) {
+        stat.innerText = arr[4];
+        stat.style.color = '#121212'; // Change the color as desired
+    } else {
+        stat.innerText = arr[5];
+        stat.style.color = '#00ca00';
+    }
+}
+
+update(range);
+
+deliverBtn.addEventListener('click', function() {
+  // Simulate project delivery with a confirmation message
+  deliverBtn.disabled = true; // Disable button to prevent multiple clicks
+  deliverMessage.style.display = 'block';
+  // Add logic to actually deliver the project to the client (potentially using an API call)
+});
+
+// Logic to show file indicator if files are shared within the project chat
+// (This would require integration with your chat functionality)
+function showFileIndicator() {
+  fileIndicator.style.display = 'inline';
+}
+
+// Call showFileIndicator() if files have been shared
+// (Replace with your actual logic for detecting file sharing)
+showFileIndicator();
+
+</script>
+
+</div></body></html>

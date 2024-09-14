@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang='en' class=''>
+
+<head>
+
+  <meta charset='UTF-8'>
+  <title>TurboLancer | A Freelancing Marketplace</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=0.7">
+
+  <link rel="icon" type="image/png" href="/static/icon.png" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.gstatic.com">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&amp;display=swap">
+
+  <style id="INLINE_PEN_STYLESHEET_ID">
+    * {
+      font-family: "Poppins", sans-serif;
+      /* Set text color to white for all elements */
+    }
+
+    .fw-medium {
+      font-weight: 500;
+    }
+
+    .fw-semibold {
+      font-weight: 600;
+    }
+
+    .fw-bold {
+      font-weight: 700;
+    }
+
+    .text-black-primary {
+      color: #333;
+    }
+
+    .text-black-secondary {
+      color: #666;
+    }
+
+    .scale-up {
+      transform: scale(1.2);
+    }
+
+    .linear-gradient-body {
+      background: linear-gradient(-287.83deg, #043c24, #0c744a);
+      padding: 10px;
+      max-height: fit-content;
+      color: #ffffff;
+
+
+    }
+
+    /* .linear-gradient-body {
+  background: linear-gradient(
+    287.83deg,
+    #8d99ae 32.33%,
+    rgba(237, 242, 244, 0) 91.61%
+  );
+} */
+    .locate-floor {
+      right: 0;
+      transform: translate(40%, 0%);
+    }
+
+    .with-fit-content {
+      width: fit-content;
+    }
+
+    /* Adjustments to the media queries */
+
+    @media only screen and (max-width: 900px) {
+      .scale-down {
+        width: 100%;
+        /* Set width to 100% for smaller screens */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    @media only screen and (max-width: 980px) {
+      .width-100-important {
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .scale-up {
+        transform: scale(1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    @media only screen and (min-width: 992px) {
+      .scale-down {
+        width: 200%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+
+    /* Color Pallete */
+    .gunmetal {
+      background-color: #2b2d42;
+    }
+
+    .cool-grey {
+      background-color: #8d99ae;
+    }
+
+    .anti-flash-white {
+      background-color: #f4efed;
+    }
+
+    .medium-candy-apple-red {
+      background-color: #04d94b;
+    }
+
+    #logo {
+      height: 50px;
+      left: -10px;
+    }
+
+    .img-fluid.scale-up {
+      margin: auto;
+      left: auto;
+      right: auto;
+      margin-bottom: 10px;
+      margin-left: 20px;
+      filter: drop-shadow(0 13px 50px #032516);
+
+    }
+
+
+    .navbar-toggler-icon {
+      color: #fff !important;
+      transition: all .3s;
+
+    }
+
+    .nav-link {
+      color: #fff !important;
+      transition: all .3s;
+
+
+
+    }
+
+    .text-primary {
+      color: #fff !important;
+      transition: all .3s;
+
+    }
+
+    .btn {
+      background-color: #029e60;
+      color: #fff !important;
+      margin: 5px;
+      font-family: "Poppins", sans-serif;
+      transition: all .3s;
+      border: none;
+      outline: none;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      background-color: #01814e;
+      color: #fff !important;
+
+    }
+
+    #typed {
+      height: 60px;
+
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 910280392810;
+      transition: all .3s;
+
+    }
+
+    .navbar.scrolled {
+      background-color: #fff;
+      box-shadow: 0 3px 20px #0000003d;
+      position: fixed;
+      transition: all .3s;
+      top: -1px;
+      left: 0px;
+      width: 100%;
+      border-radius: 0 0 16px 16px;
+    }
+
+    .navbar.scrolled .nav-link {
+      color: #202020 !important;
+      transition: all .3s;
+
+
+    }
+
+    .nav-link:hover {
+      filter: brightness(80%);
+    }
+
+    .navbar.scrolled .text-primary {
+      color: #202020 !important;
+      transition: all .3s;
+
+    }
+
+    .navbar.scrolled .nav-link.btn {
+      color: #fff !important;
+    }
+
+
+    /*////////////////////////////////////////////////////////////////////////////////////////*/
+
+    /* Features Section */
+    .features-section {
+      padding: 80px 0;
+    }
+
+    .features-section .section-heading {
+      font-size: 36px;
+      color: green;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .features-section .feature {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .features-section .feature-icon {
+      font-size: 48px;
+      color: #1b8f61;
+      margin-bottom: 20px;
+    }
+
+    .features-section .feature-heading {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .features-section .feature-description {
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Call to Action Section */
+    .cta-section {
+      border-radius: 16px;
+      background: linear-gradient(-287.83deg, #c7244f, #4b0d1e);
+      padding: 20px 7px;
+      color: #fff;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+      /* Center-align content */
+    }
+
+    @media only screen and (max-width: 980px) {
+      .cta-section {
+        flex-direction: column-reverse;
+        background: linear-gradient(-287.83deg, #c7244fcc, #4b0d1e4f), url(/static/wepik-export-20230914202927znWs.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+      }
+
+      .cta-section img {
+        display: none;
+      }
+
+
+    }
+
+
+    .cta-section .section-heading {
+      font-size: 30px;
+      color: #ffffff !important;
+      text-align: left;
+      margin-bottom: 20px;
+      /* Reduce margin for smaller screens */
+    }
+
+    .cta-section p {
+      font-size: 20px;
+      color: #f0f0f0;
+      text-align: left;
+      margin-bottom: 20px;
+      /* Reduce margin for smaller screens */
+    }
+
+    .cta-section .image-container {
+      text-align: center;
+    }
+
+    .cta-section img {
+      max-width: 100%;
+      width: 35%;
+      height: auto;
+      border-radius: 9px;
+      filter: drop-shadow(0 4px 14px #4b0d1eec);
+    }
+
+
+
+
+    /* FAQ Section */
+    .faq-section {
+      background-color: #fff;
+      padding: 60px 0;
+    }
+
+    .faq-section .section-heading {
+      font-size: 36px;
+      color: black;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .faq-section .card-header {
+      background-color: #f2f2f2;
+    }
+
+    .faq-section button {
+      color: #00a56e !important;
+      transition: all 0.3s ease;
+      background-color: transparent;
+      width: 100%;
+      border-radius: 3px;
+      outline: none;
+      text-decoration: none;
+    }
+
+    .faq-section button:active {
+      color: #121212;
+      text-decoration: none;
+    }
+
+    .faq-section .btn::after {
+      display: none;
+    }
+
+    .faq-section .btn:active {
+      outline: none;
+      border: none;
+    }
+
+    .faq-section .card-header button:hover {
+      color: #2b2b2b !important;
+      box-shadow: none;
+      background-color: transparent;
+    }
+
+    .faq-section .card-body {
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      background-color: #f8faf9;
+      padding: 80px 0;
+      width: 100%;
+    }
+
+    .contact-section .section-heading {
+      font-size: 36px;
+      color: black;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .contact-section .form-control {
+      border-radius: 0;
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
+      border-bottom: 1px solid #0f6b5c;
+      transition: border-color 0.3s ease;
+    }
+
+    .contact-section .form-control:focus {
+      border-color: #2c8a5f;
+    }
+
+
+
+    .contact-section .contact-info {
+      font-size: 18px;
+      color: #333;
+    }
+
+    /* Footer Section */
+    footer {
+      background-color: #202020;
+      padding: 30px 0;
+    }
+
+    footer p {
+      font-size: 16px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+
+
+    /* On Scroll Animation */
+    .animated {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .animated.fadeIn {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    ::selection {
+      color: white;
+      background-color: #00a56e;
+    }
+
+    -moz-::selection {
+      color: white;
+      background-color: #00a56e;
+    }
+
+    :-webkit-::selection {
+      color: white;
+      background-color: #00a56e;
+    }
+
+    /* Add your own animations here */
+
+    /* Scroll Animation */
+    .scroll-reveal {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+
+
+    /* Gradient Background */
+    .gradient-bg {
+      background-image: linear-gradient(to bottom, #00ce2283, #00a56e), url(/static/6071fdco.png);
+      background-size: cover;
+      border-radius: 0 0 50px 50px;
+      background-position: center;
+      background-attachment: initial;
+      box-shadow: 0 1px 10px #121212;
+    }
+
+    /* Image with Border Bottom */
+    .image-with-border {
+      position: relative;
+    }
+
+    .image-with-border::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background-color: #00a56e;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+
+    #sc {
+      color: white;
+      top: 100px !important;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+
+
+    }
+
+    .wave-group {
+      position: relative;
+    }
+
+    .wave-group .input {
+      font-size: 16px;
+      padding: 10px 10px 10px 5px;
+      display: block;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #515151;
+      background: transparent;
+    }
+
+    .wave-group .input:focus {
+      outline: none;
+    }
+
+    .wave-group .label {
+      color: #999;
+      font-size: 18px;
+      font-weight: normal;
+      position: absolute;
+      pointer-events: none;
+      left: 5px;
+      top: 10px;
+      display: flex;
+    }
+
+    .wave-group .label-char {
+      transition: 0.2s ease all;
+      transition-delay: calc(var(--index) * .06s);
+      font-size: 20px;
+
+    }
+
+    .wave-group .input:focus~label .label-char,
+    .wave-group .input:valid~label .label-char {
+      transform: translateY(-20px);
+      font-size: 14px;
+      color: #00a56e;
+    }
+
+    .wave-group .bar {
+      position: relative;
+      display: block;
+      width: 100%;
+    }
+
+    .wave-group .bar:before,
+    .wave-group .bar:after {
+      content: '';
+      height: 2px;
+      width: 0;
+      bottom: 1px;
+      position: absolute;
+      background: #00a56e;
+      transition: 0.4s ease all;
+      -moz-transition: 0.4s ease all;
+      -webkit-transition: 0.4s ease all;
+    }
+
+    .wave-group .bar:before {
+      left: 50%;
+    }
+
+    .wave-group .bar:after {
+      right: 50%;
+    }
+
+    .wave-group .input:focus~.bar:before,
+    .wave-group .input:focus~.bar:after {
+      width: 50%;
+    }
+
+    .ask {
+      float: left;
+      width: 100%;
+      height: 60px;
+    }
+
+    .ask::after {
+      display: none;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar {
+      width: 10px;
+      background-color: transparent;
+    }
+
+    /* Thumb */
+    ::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 50px;
+
+    }
+
+    /* Hovered Thumb */
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #555;
+      border-radius: 50px;
+    }
+
+    * {
+      font-family: "Poppins", Arial, sans-serif;
+    }
+
+    .before::before {
+      content: '✔';
+      color: #00ff2a;
+      margin-right: 10px;
+      filter: drop-shadow(0 6px 30px #4b0d1e);
+      width: 20px;
+      height: 20px;
+      border-radius: 50px;
+    }
+    img{
+    pointer-events: none;}
+  </style>
+
+
+  <script
+    src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+  <script
+    src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeConsoleRunner-6d8bf8b4b479137260842506acbb12717dace0823c023e08b96360e60b0840d9.js"></script>
+  <script
+    src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeRefreshCSS-44fe83e49b63affec96918c9af88c0d80b209a862cf87ac46bc933074b8c557d.js"></script>
+  <script
+    src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeRuntimeErrors-4f205f2c14e769b448bcf477de2938c681660d5038bc464e3700256713ebe261.js"></script>
+</head>
+
+<body>
+
+  <body>
+    <div class="anti-flash-white linear-gradient-body">
+      <!-- NAVBAR SECTION -->
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+          <a class="navbar-brand fw-bold" href="#">
+            <span class=""><img src="/static/dark_logo.png" alt="" class="img-fluid " id="logo"></span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium">
+              <!-- Features -->
+              <li class="nav-item">
+                <a class="nav-link" href="#"></i>Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#features"></i>Benefits </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#cta">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#faq"><i class="fas fa-question-circle"></i> FAQ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn gunmetal fw-medium" href="/signin">Login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- HERO SECTION -->
+      <div class="container-fluid position-relative overflow-hidden mb-4 mb-sm-0" style="min-height: 95vh;">
+
+        <div class="container mt-xl-5 mt-lg-5">
+          <div class="row pt-xl-5 pt-lg-5 d-sm-flex flex-column-reverse flex-lg-row text-center text-md-start">
+            <div class="col-xl-6 col-lg-7 pt-xl-5 mt-xl-5 mt-lg-5">
+              <h3 class="h3 fw-semibold opacity-75">
+                <!--       TYPED JS       -->
+                <span id="typed"></span>
+              </h3>
+
+              <h1 class="h1 fw-bold">Engage a skilled freelance service without delay.</h1>
+              <p class="fs-6 fw-medium w-75 width-100-important opacity-75">Discover your ultimate
+                freelancing hub, where the fusion of creativity and expertise occurs. Engage with
+                top-tier talents from all over the world and witness your ideas soar to new heights.</p>
+              <a href="/signin" class="btn medium-candy-apple-red fs-5">login</a>
+              <a href="/start_selling_now" class="btn medium-candy-apple-red fs-5">Start selling now </a>
+              <a href="/begin_client_journey" class="btn medium-candy-apple-red fs-5">Begin client journey</a>
+            </div>
+            <div class="col-xl-6 col-lg-5 mt-lg-5 position-relative">
+              <img src="/static/ideogram-removebg-preview.png" alt="" class="img-fluid scale-up">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <h2 class="section-heading" style="color:  #00a56e;">Why Choose TurboLancer?</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="feature">
+              <i class="fas fa-search feature-icon"></i>
+              <h3 class="feature-heading">Watch Your Ideas Soar!</h3>
+              <p class="feature-description">Connect with top-notch talents from around the globe and watch your ideas
+                take flight.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="feature">
+              <i class="fas fa-clock feature-icon"></i>
+              <h3 class="feature-heading">Save Time</h3>
+              <p class="feature-description">By using TurboLancer, you can quickly find and hire a developer, saving you
+                time and effort in the hiring process.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="feature">
+              <i class="fas fa-dollar-sign feature-icon"></i>
+              <h3 class="feature-heading">Cost-Effective</h3>
+              <p class="feature-description">TurboLancer offers competitive pricing and ensures that you get the best
+                value
+                for your money.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section id="cta" class="cta-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <h2 class="section-heading" style="color: black; font-family: poppins, sans-serif;">The greatest aspect?
+              Everything<b
+                style="font-size: 50px;font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color:  #00ff88;">.</b>
+            </h2>
+            <p><b class="before">Adhere to your financial plan.</b><br></p>
+            <p> &nbsp;&nbsp;&nbsp;&nbsp;  Discover the ideal service for any budget. No hourly charges, exclusively
+              project-based pricing.
+              <br>
+            </p>
+            <p><b class="before">Attain high-quality results swiftly.</b><br></p>
+            <p> &nbsp;&nbsp;&nbsp;&nbsp;  Delegate your project to a skilled freelancer within moments, and receive
+              enduring outcomes. <br>
+              <br>
+            <p>
+            <p><b class="before">Rely on continuous 24/7 assistance.</b><br></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;  Our support team is accessible round the clock to provide aid whenever and
+              wherever you need it.
+            </p>
+          </div>
+        </div>
+      </div>
+      <img src="/static/4543.png" alt="img">
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <h2 class="section-heading"><b
+                style="font-size: 50px;font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color: #00a56e;"><i
+                  class="fas fa-cogs"></i></b> Frequently Asked Questions</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <div class="accordion" id="accordionFAQ">
+              <div class="card">
+                <div class="card-header" id="faqHeading1">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#faqCollapse1"
+                      aria-expanded="true" aria-controls="faqCollapse1">
+                      Can I hire multiple developers for my project?
+                    </button>
+                  </h5>
+                </div>
+                <div id="faqCollapse1" class="collapse show" aria-labelledby="faqHeading1" data-parent="#accordionFAQ">
+                  <div class="card-body">
+                    No, you can hire only one developer for your project. We believe in providing focused attention and
+                    ensuring the best outcome for your project.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="faqHeading2">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                      data-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                      How can I contact the TurboLancer support team?
+                    </button>
+                  </h5>
+                </div>
+                <div id="faqCollapse2" class="collapse" aria-labelledby="faqHeading2" data-parent="#accordionFAQ">
+                  <div class="card-body">
+                    You can contact our support team by sending an email to support@TurboLancer.com or by filling out
+                    the
+                    contact form on our website. We are available to assist you with any questions or concerns you may
+                    have.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="faqHeading3">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                      data-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                      What payment methods are accepted?
+                    </button>
+                  </h5>
+                </div>
+                <div id="faqCollapse3" class="collapse" aria-labelledby="faqHeading3" data-parent="#accordionFAQ">
+                  <div class="card-body">
+                    We accept major credit cards such as Visa, Mastercard, and American Express. We also support payment
+                    through PayPal.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <h2 class="section-heading">Contact Us<b
+                style="font-size: 50px;font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; color:  #00a56e;">.</b>
+            </h2>
+            <p>If you have any questions or inquiries, feel free to contact us. We are here to assist you.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <form>
+              <div class="form-group">
+                <div class="wave-group">
+                  <input required="" type="text" class="input">
+                  <span class="bar"></span>
+                  <label class="label">
+                    <span class="label-char" style="--index: 0">N</span>
+                    <span class="label-char" style="--index: 1">a</span>
+                    <span class="label-char" style="--index: 2">m</span>
+                    <span class="label-char" style="--index: 3">e</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="wave-group">
+                  <input required="" type="email" class="input">
+                  <span class="bar"></span>
+                  <label class="label">
+                    <span class="label-char" style="--index: 0">E</span>
+                    <span class="label-char" style="--index: 1">m</span>
+                    <span class="label-char" style="--index: 2">a</span>
+                    <span class="label-char" style="--index: 3">i</span>
+                    <span class="label-char" style="--index: 4">l</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="wave-group">
+                  <textarea rows="5" required="" class="input"></textarea>
+                  <span class="bar"></span>
+                  <label class="label">
+                    <span class="label-char" style="--index: 0">M</span>
+                    <span class="label-char" style="--index: 1">a</span>
+                    <span class="label-char" style="--index: 2">s</span>
+                    <span class="label-char" style="--index: 3">a</span>
+                    <span class="label-char" style="--index: 4">g</span>
+                    <span class="label-char" style="--index: 5">e</span>
+                  </label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+      </script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdpn.io/cpe/boomboom/pen.js?key=pen.js-d10a6677-15fd-7d4c-3da3-f7d832bdf502"
+      crossorigin></script>
+
+
+    <script>
+
+
+      var typed = new Typed("#typed", {
+        strings: ["Make your work a canvas for dreams."
+          ,
+          "Make your work a journey to success.",
+
+          "Make your work a symphony of destiny.",
+
+          "Make your work a stage for greatness."],
+        typeSpeed: 90,
+        startDelay: 400,
+        loop: true,
+        loopCount: Infinity,
+        backDelay: 9000
+      });
+
+      window.onscroll = function () { scrollFunction() };
+
+      function scrollFunction() {
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+          document.querySelector(".navbar").classList.add('scrolled')
+        } else {
+          document.querySelector(".navbar").classList.remove('scrolled')
+        }
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/1234567890.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/umd/scrollreveal.min.js"></script>
+    <script>
+      // Scroll Reveal Animation
+      ScrollReveal().reveal('.animated', {
+        delay: 200,
+        distance: '50px',
+        duration: 800,
+        easing: 'ease',
+        opacity: 0,
+        origin: 'bottom',
+        reset: true,
+        viewFactor: 0.4
+      });
+
+      // Scroll to Top Button
+      $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+          $('.scroll-to-top').addClass('visible');
+        } else {
+          $('.scroll-to-top').removeClass('visible');
+        }
+      });
+
+      $('.scroll-to-top').click(function (e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, 800);
+      });
+
+      // Sticky Navigation Bar
+      $(window).scroll(function () {
+        if ($(this).scrollTop() > 0) {
+          $('.sticky-nav').addClass('transition-on-scroll');
+        } else {
+          $('.sticky-nav').removeClass('transition-on-scroll');
+        }
+      });
+    </script>
+
+
+  </body>
+
+</html>

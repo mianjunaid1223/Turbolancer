@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+    <title>TurboLancer | Add info</title>
+    <link rel="icon" type="image/png" href="/static/icon.png" />
+    <script src="https://kit.fontawesome.com/cfa490a0db.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/cfa490a0db.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;');
+
+        * {
+            font-family: "Poppins", sans-serif;
+            transition: all 0.5s;
+            --main-height: auto-fit;
+            text-wrap: balance;
+        }
+
+        body {
+            padding: 30px;
+            background: #fff;
+
+        }
+
+        .container {
+            width: 100%;
+            margin-top: 2.5%;
+            max-width: 46.875rem;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 1px 10px 12px rgba(0, 3, 0, 0.439);
+            border-radius: 8px;
+            padding: 16px;
+            background: #fff;
+            --gap: 8em;
+            --line: 1px;
+            --color: rgba(0, 0, 0, 0.02);
+
+            background-image: linear-gradient(-120deg,
+                    transparent calc(var(--gap) - var(--line)),
+                    var(--color) calc(var(--gap) - var(--line) + 1px),
+                    var(--color) var(--gap)),
+                linear-gradient(20deg,
+                    transparent calc(var(--gap) - var(--line)),
+                    var(--color) calc(var(--gap) - var(--line) + 1px),
+                    var(--color) var(--gap));
+            background-size: var(--gap) var(--gap);
+            z-index: 1;
+            height: max-content;
+            transition: height 0.5s ease-in-out;
+
+
+        }
+
+        .logo {
+            opacity: 1;
+            width: 100px;
+            object-fit: scale-down;
+            height: 60px;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: auto;
+            padding: 3px;
+            display: none;
+        }
+
+        .section.A {
+            opacity: 0;
+
+        }
+
+        .section.A h1,
+        .section.C h1,
+        .section.A h4 {
+            font-weight: 100;
+            text-align: center;
+            color: rgb(34, 34, 34);
+
+        }
+
+
+        .gmail {
+            padding: 8px;
+            border: 1px solid #12121260;
+            border-radius: 50px;
+
+            font-weight: 100;
+            font-size: 15px;
+            width: max-content;
+            color: #202020;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffffff;
+        }
+
+        .section.A h2 {
+            font-weight: 100;
+            color: rgb(61, 61, 61);
+            margin-left: 10%;
+            max-width: 85%;
+            font-size: 18px;
+
+
+        }
+
+        .group.invalid {
+            position: relative;
+            margin-top: 30px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+
+
+        }
+
+        @keyframes jiggle {
+            0% {
+                transform: translateX(0);
+
+            }
+
+            10% {
+                transform: translateX(-15px);
+            }
+
+            20% {
+                transform: translateX(0);
+
+            }
+
+            30% {
+                transform: translateX(-15px);
+            }
+
+            40% {
+                transform: translateX(0);
+
+            }
+
+            50% {
+                transform: translateX(-15px);
+            }
+
+            60% {
+                transform: translateX(0);
+
+            }
+
+            70% {
+                transform: translateX(-15px);
+            }
+
+            80% {
+                transform: translateX(0);
+
+            }
+
+            90% {
+                transform: translateX(-15px);
+            }
+
+            100% {
+                transform: translateX(0);
+
+            }
+        }
+
+        @keyframes jiggles {
+            0% {
+                margin-left: 50%;
+
+            }
+
+            10% {
+                margin-left: 51%;
+            }
+
+            20% {
+                margin-left: 50%;
+
+            }
+
+            30% {
+                margin-left: 51%;
+            }
+
+            40% {
+                margin-left: 50%;
+
+            }
+
+            50% {
+                margin-left: 51%;
+            }
+
+            60% {
+                margin-left: 50%;
+
+            }
+
+            70% {
+                margin-left: 51%;
+            }
+
+            80% {
+                margin-left: 50%;
+
+            }
+
+            90% {
+                margin-left: 51%;
+            }
+
+            100% {
+                margin-left: 50%;
+
+            }
+        }
+
+        .invalid .input {
+            font-size: 16px;
+            padding: 10px 10px 10px 5px;
+            display: block;
+            width: 340px;
+            border: none;
+            border-bottom: 1px solid #515151;
+            background: transparent;
+            animation: jiggle .5s forwards;
+        }
+
+
+
+
+
+        .invalid .input:focus~label,
+        .invalid .input:valid~label {
+            top: -20px;
+            font-size: 14px;
+            color: #b70000;
+            animation: jiggle .5s forwards;
+
+        }
+
+
+
+        .invalid .bar:before,
+        .invalid .bar:after {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 1px;
+            position: absolute;
+            background: #b70000;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+            animation: jiggle .5s forwards;
+
+        }
+
+
+        .group {
+            position: relative;
+            margin-top: 30px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .input {
+            font-size: 16px;
+            padding: 10px 10px 10px 5px;
+            display: block;
+            width: 340px;
+            border: none;
+            border-bottom: 1px solid #515151;
+            background: transparent;
+        }
+
+        .input:focus {
+            outline: none;
+        }
+
+        label {
+            color: #999;
+            font-size: 18px;
+            font-weight: normal;
+            position: absolute;
+            pointer-events: none;
+            left: 5px;
+            top: 10px;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+
+        .input:focus~label,
+        .input:valid~label {
+            top: -20px;
+            font-size: 14px;
+            color: #007e02;
+        }
+
+        .bar {
+            position: relative;
+            display: block;
+            width: 340px;
+        }
+
+        .bar:before,
+        .bar:after {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 1px;
+            position: absolute;
+            background: #007e02;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+
+        .bar:before {
+            left: 50%;
+        }
+
+        .bar:after {
+            right: 50%;
+        }
+
+        .input:focus~.bar:before,
+        .input:focus~.bar:after {
+            width: 50%;
+        }
+
+        .next {
+            background-color: #007202;
+            color: #fff;
+            outline: none;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 10px;
+            height: 60px;
+            min-width: 80px;
+            font-size: larger;
+            position: relative;
+            margin-top: 30px;
+            margin-left: calc(100% - 95px);
+            transition: all 0.2s !important;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        .next.C {
+            margin-left: 10px !important;
+        }
+
+
+        .prev {
+            background-color: #f0f0f0;
+            color: #000;
+            outline: none;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 10px;
+            height: 60px;
+            min-width: 80px;
+            font-size: larger;
+            position: relative;
+            margin-top: 30px;
+            margin-left: calc(100% - 95px);
+            transition: all 0.2s !important;
+        }
+
+        .prev.B {
+            margin-left: calc(100% - 185px);
+
+        }
+
+        .prev:hover {
+            transform: scale(1.1);
+        }
+
+        .revers {
+            animation: reverseAnimation 1s reverse;
+        }
+
+        @keyframes reverseAnimation {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        .farwored {
+            animation: forwardAnimation 1s forwards;
+        }
+
+        @keyframes forwardAnimation {
+            from {
+                opacity: 0;
+                transform: scale(1.1);
+
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+
+            }
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: auto;
+            padding: 3px;
+        }
+
+        /*##########################################_____AVATAR_CSS___####################################*/
+        .container_p {
+            height: max-content;
+            width: max-content;
+            border-radius: 10px;
+            box-shadow: 4px 4px 30px rgba(0, 0, 0, .2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-left: 10px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            gap: 5px;
+            background-color: #3cff000a;
+        }
+
+        .header {
+            flex: 1;
+            width: 100%;
+            border: 2px dashed #239600b7;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .header svg {
+            height: 100px;
+        }
+
+        .header p {
+            text-align: center;
+            color: black;
+        }
+
+        .footer {
+            background-color: #3cff000a;
+            width: 100%;
+            height: 40px;
+            padding: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: black;
+            border: none;
+            position: relative;
+        }
+
+        .footer svg {
+            height: 130%;
+            fill: #2ec400b7;
+            background-color: rgba(70, 66, 66, 0.103);
+            border-radius: 50%;
+            padding: 2px;
+            cursor: pointer;
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205);
+        }
+
+        .container_p.none {
+            animation: jiggles .5s forwards;
+
+            background-color: #ff00000a;
+        }
+
+        .none .header {
+
+            border: 2px dashed #960000b7;
+
+        }
+
+
+        .none .footer {
+            background-color: #ff00000a;
+
+        }
+
+        .none .footer svg {
+            fill: #c40000b7;
+
+        }
+
+        #delete {
+            height: 40px;
+            fill: #ff0000e7;
+            padding: 2px;
+            cursor: pointer;
+        }
+
+        .footer p {
+            flex: 1;
+            white-space: nowrap;
+            float: right;
+            width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #file {
+            display: block;
+            margin-top: -30px;
+            cursor: pointer;
+            width: 100%;
+            z-index: 100;
+            opacity: 0;
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .image-container img {
+            width: 300px;
+            height: auto;
+            max-height: 230px;
+            object-fit: cover;
+            /* You might want to adjust this based on your needs */
+            border-radius: 10px;
+        }
+
+        .delete-icon {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 0;
+            right: 0;
+            border-radius: 10px;
+            background-color: rgba(255, 244, 244, 0.119);
+            transition: all 0.3s ease;
+            transform: scale(1.2);
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container:hover .delete-icon {
+            transform: scale(1);
+            opacity: 1;
+
+        }
+
+
+        body {
+            font-family: sans-serif
+        }
+
+        table {
+            width: auto;
+            margin-left: auto;
+            line-height: 1em
+        }
+
+        .container_t {
+            width: fit-content;
+            margin: 1em auto
+        }
+
+        .ta-container {
+            width: 100%;
+            border: 1px solid hsl(0, 0%, 70%);
+            border-radius: .25em;
+            margin: .25em 0 1.5em
+        }
+
+        .hasfocus {
+            box-shadow: 0 0 6px hsl(210, 50%, 60%)
+        }
+
+        .textarea {
+            padding: .25em;
+            text-wrap: wrap !important;
+            padding: 7px;
+            width: 100%;
+            max-width: 100%;
+            border: none;
+            font-size: large;
+            vertical-align: bottom;
+            color: hsl(0, 0%, 50%);
+            border-radius: .25em;
+            outline: none
+        }
+
+        .status-bar {
+            background: hsl(0, 0%, 90%);
+            padding: .25em;
+            text-align: right;
+            font-size: .7em;
+            width: 100%;
+            color: hsl(0, 0%, 50%);
+            border-radius: 0 0 .25em .25em
+        }
+
+        .charcount,
+        .remaining {
+            font-weight: bold
+        }
+
+        .over {
+            color: hsl(0, 80%, 60%)
+        }
+
+        #submitbtn:enabled:hover {
+            filter: brightness(90%) !important;
+        }
+
+        #submitbtn:enabled:active {
+            filter: brightness(80%) !important;
+        }
+
+        #submitbtn:disabled {
+            opacity: 0.6 !important;
+            pointer-events: none;
+        }
+
+        .logo {
+            view-transition-name: logo;
+        }
+
+        ::view-transition-old(logo),
+        ::view-transition-new(logo) {
+            display: block;
+        }
+
+        ::view-transition-old(root) {
+            animation: 1s transition-out 0s ease;
+        }
+
+        ::view-transition-new(root) {
+            animation: 1s transition-in 0s ease;
+        }
+
+        @keyframes transition-out {
+            from {
+                opacity: 1;
+                scale: 1;
+                filter: blur(1px);
+            }
+
+            to {
+                opacity: 0;
+                scale: 1.1;
+                filter: blur(10px);
+
+            }
+        }
+
+        @keyframes transition-in {
+            from {
+                opacity: 0;
+                scale: 1.1;
+                filter: blur(10px);
+
+            }
+
+            to {
+                opacity: 1;
+                scale: 1;
+                filter: blur(1px);
+
+            }
+        }
+
+        @media (max-width:800px) {
+            .container {
+                width: 100%;
+                position: absolute;
+                margin: 0;
+                transform: translateX(0) translateY(-50%);
+                top: 50%;
+                scale: 0.8;
+            }
+
+            .container .section {
+
+                width: 100%;
+
+            }
+
+        }
+
+        @media (max-width:680px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                margin: 0;
+                min-height: 100%;
+                transform: translateX(0) translateY(0%);
+                top: 0%;
+
+                scale: 01;
+                margin-left: 0;
+                position: absolute;
+
+
+            }
+
+            .container .section {
+                scale: 0.8;
+                height: max-content;
+                width: 100%;
+                position: absolute;
+
+                justify-content: space-evenly;
+                align-items: space-around;
+                margin-top: 15%;
+
+            }
+        }
+
+        @media (max-width:580px) {
+            .container_t {
+                width: 100% !important;
+                scale: 0.8;
+                margin: 5px;
+            }
+
+            .group,
+            .group.invalid {
+                margin-left: 0;
+                transform: translateX(0);
+            }
+
+            .section,
+            .section h1,
+            .section h2,
+            .section h4,
+            .section p {
+                text-wrap: wrap;
+                text-align: left !important;
+
+            }
+
+            h2 {
+                text-align: left;
+                margin-left: 0 !important;
+                transform: translateX(0);
+                max-width: 97%;
+            }
+
+            button {
+                text-align: center !important;
+            }
+
+        }
+
+        button {
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img class='logo' src="/static/icon.png" alt="">
+        <div class="section A farwored" style='display: block;'>
+            <h1 class="title">Account verification</h1>
+            <h4>"This helps ensure the safety of your account.</h4>
+            <h3 class="gmail"><i class='fas fa-user-circle'></i>&nbsp; {{ emaloz }}</h3>
+            <h2>An email with a verification code was just sent to {{ emaloz }}.</h2>
+
+            <div class="group">
+                <input onkeypress="go(this)" autocomplete="none" required="" type="text" class="input">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Enter verification code</label>
+            </div>
+            <button onclick="verify(this)" class="next A" data-parent='A'>Verify</button>
+        </div>
+        <div class="section B" style="display: none;">
+            <div class="container_p">
+                <div class="header">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path
+                                d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
+                                stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            </path>
+                        </g>
+                    </svg>
+                    <p>Browse profile picture to upload!</p>
+                </div>
+                <label for="file" class="footer">
+                    <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path>
+                            <path d="M18.153 6h-.009v5.342H23.5v-.002z"></path>
+                        </g>
+                    </svg>
+                    <p class="name">Click to select picture</p>
+
+                </label>
+                <input accept=".png, .jpg, .jpeg" onchange="readURL(this)" id="file" type="file">
+            </div>
+            <div style="display:flex;flex-direction: row; width: 100%;">
+                <button onclick="next(this)" class="next B" data-parent='B'>Next</button>
+            </div>
+
+        </div>
+        <div class="section C" style='display: none;'>
+
+            <div class="container_t">
+                <form id="theform" action="javascript:void(0);">
+                    <h1 for="about-yourself">About yourself:</h1>
+                    <div class="ta-container">
+                        <textarea id="about-yourself" class="textarea" name="about-yourself" rows="12" cols="75"
+                            data-maxchars="500" data-over="false"
+                            placeholder="Ensure the text exceeds 250 characters for a stronger impact."
+                            required></textarea>
+                        <div class="status-bar">
+                            <table>
+                                <tr>
+                                    <td>Characters:</td>
+                                    <td class="charcount"></td>
+                                </tr>
+                                <tr>
+                                    <td class="remaining-label">Remaining:</td>
+                                    <td class="remaining"></td>
+
+                                </tr>
+                                <tr>
+                                    <td class="less" style=" text-align: right;color: hsl(0,80%,60%);">Less then 250
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="display:flex;flex-direction: row; width: 100%;">
+                <button onclick="prev(this)" class="prev C B" data-parent='C'>preveus</button>
+                <button id="submitbtn" class="next C" onclick="updateData()">Continue</button>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        const checkList = []
+        function verify(x) {
+            const inputElement = document.querySelector('.input');
+
+            if (inputElement && inputElement.value && inputElement.value.length === 6) {
+                next(x);
+                if (document.querySelector('.invalid')) {
+                    document.querySelector('.group').classList.remove('invalid');
+                }
+            } else {
+                if (!document.querySelector('.invalid')) {
+                    document.querySelector('.group').classList.add('invalid');
+                    inputElement.focus();
+                }
+                document.querySelector('.group').classList.remove('invalid');
+
+                inputElement.focus();
+                document.querySelector('.group').classList.add('invalid');
+
+            }
+        } function go(x) {
+
+            if (document.querySelector('.invalid')) {
+                document.querySelector('.group').classList.remove('invalid');
+                verify(document.querySelector('.next.A'))
+
+            }
+        }
+        function ______(name, value, daysToExpire, re) {
+            let cookie = `${name}=${encodeURIComponent(value)}; path=/`;
+
+            if (daysToExpire) {
+                const expirationDate = new Date();
+                expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+                cookie += `; expires=${expirationDate.toUTCString()}`;
+            }
+
+            document.cookie = cookie;
+            setTimeout(() => {
+                window.location.href  = re
+
+            }, 200);
+        }
+
+        async function updateData() {
+            const data = {
+                email: "{{ email }}",
+                textAreaValue: document.querySelector('.textarea').value
+            };
+
+            try {
+                const response = await fetch('/update_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error updating data: ' + response.statusText);
+                }
+
+                const responseData = await response.json();
+
+                // Access specific elements from responseData
+                const message = responseData.message;
+                const ne = responseData.ne;
+                const re = responseData.re;
+
+                ______(ne, message, 85, re) 
+
+                // Perform further actions based on these values
+                // Update the UI, manipulate data, etc.
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                // Handle error cases here
+            }
+        }
+
+        const html_header = document.querySelector('.header').innerHTML
+        function remove_img() {
+            function doit() {
+                console.log(html_header)
+                document.querySelector('.header').innerHTML = html_header;
+                var fileInput = document.getElementById('file');
+                fileInput.value = '';
+                document.querySelector('.name').innerText = 'Click to select picture';
+            }
+            if (!document.startViewTransition) {
+                doit();
+                return;
+            }
+
+            // With View Transitions:
+            const transition = document.startViewTransition(() => doit());
+        }
+
+        function next(x) {
+
+            function doit(x) {
+
+                let data = x.getAttribute('data-parent');
+                let current = document.querySelector(`.${data}`);
+                let next = current.nextElementSibling;
+
+                // Add classes for animation preparation
+                current.classList.add('revers');
+                next.classList.add('farwored');
+
+                const transition = document.startViewTransition(() => {
+                    current.style.setProperty('display', 'none');
+                    next.style.setProperty('display', 'flex');
+                });
+
+                // Signal update completed to trigger animation
+                transition.updateCallbackDone();
+            }
+
+            if (!document.startViewTransition) {
+                if (x.getAttribute('data-parent') === 'B' && !(checkList[0] === 'uploaded')) {
+                    if (!document.querySelector('.container_p.none')) {
+                        document.querySelector('.container_p').classList.add('none')
+                    }
+                    else {
+                        document.querySelector('.container_p').classList.remove('none')
+                        setTimeout(() => {
+                            document.querySelector('.container_p').classList.add('none')
+
+                        }, 10);
+                    }
+                }
+                else {
+                    doit(x);
+                }
+            }
+
+            const container = document.querySelector('.container_p');
+            console.log("x.getAttribute('data-parent'): ", x.getAttribute('data-parent'));
+            console.log("checkList[0]: ", checkList[0]);
+            console.log("container.classList.contains('none'): ", container.classList.contains('none'));
+
+            if (x.getAttribute('data-parent') === 'B' && checkList[0] !== 'uploaded') {
+                if (!container.classList.contains('none')) {
+                    container.classList.add('none');
+                } else {
+                    container.classList.remove('none');
+                    setTimeout(() => {
+                        container.classList.add('none');
+                    }, 10);
+                }
+            } else {
+                const transition = document.startViewTransition(() => doit(x));
+            }
+
+
+        }
+
+
+        function prev(x) {
+            function doit(x) {
+                let data = x.getAttribute('data-parent');
+                console.log(data);
+                let current = document.querySelector(`.${data}`);
+                let prev = current.previousElementSibling;
+
+                current.classList.remove('farwored');
+                prev.classList.remove('revers');
+
+                setTimeout(() => {
+                    prev.style.display = 'flex';
+                    current.style.display = 'none';
+                }, 50);
+            }
+
+            if (!document.startViewTransition) {
+                doit(x);
+                return;
+            }
+
+            const transition = document.startViewTransition(() => doit(x));
+        }
+        function readURL(input) {
+
+            function doit(input) {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageBase64 = e.target.result;
+                        console.log("<img src='" + e.target.result + "'alt = 'profile picture'>")
+                        document.querySelector('.header').innerHTML = "<div class='header'><div class='image-container'><img  src='" + e.target.result + "'onclick='remove_img()' alt = 'profile picture'><span onclick='remove_img()' class='delete-icon'>  <svg   id='delete' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><g id='SVGRepo_bgCarrier' stroke-width='0'></g><g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'></g><g id='SVGRepo_iconCarrier'> <path d='M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z' stroke='#000000' stroke-width='1'></path> <path d='M19.5 5H4.5' stroke='#000000' stroke-width='1' stroke-linecap='round'></path> <path d='M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z' stroke='#000000' stroke-width='1'></path> </g></svg></span></div></div"
+                        checkList[0] = 'uploaded'
+
+                        document.querySelector('.name').innerText = input.files[0].name;
+                        var email = "{{ email }}";
+
+                        // Create a new FormData object
+                        var formData = new FormData();
+                        formData.append("image", input.files[0]);
+                        formData.append("email", email);
+
+                        // Send the AJAX request
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/UPLOAD_IMAGE");
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    var response = JSON.parse(xhr.responseText);
+                                    // checkList[0] = uploaded
+                                } else {
+                                    console.log("Error: " + xhr.status);
+                                    // checkList[0] = null
+
+                                }
+                            }
+                        };
+                        xhr.send(formData);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    if (document.querySelector('.container_p').classList.contains('none')) {
+                        document.querySelector('.container_p').classList.remove('none')
+                    }
+
+                }
+            }
+            if (!document.startViewTransition) {
+                doit(input);
+                return;
+            }
+
+            // With View Transitions:
+            const transition = document.startViewTransition(() => doit(input));
+        }
+        function setFocus(container) {
+            container.classList.add('hasfocus');
+        }
+
+        function removeFocus(container) {
+            container.classList.remove('hasfocus');
+        }
+
+        function setSubmitBtnDisabledStatus(disabled) {
+            const submitBtn = document.querySelector('#submitbtn');
+            submitBtn.disabled = disabled;
+        }
+
+        function checkOverLimit(container, textarea, maxLength) {
+            const charCount = textarea.value.length;
+            const charCountElement = container.querySelector('.charcount');
+            const remainingElement = container.querySelector('.remaining');
+            const remainingLabel = container.querySelector('.remaining-label');
+
+            charCountElement.innerHTML = `${charCount}/${maxLength}`;
+            const remainingChars = maxLength - charCount;
+            remainingElement.innerHTML = Math.abs(remainingChars);
+
+            if (charCount > maxLength) {
+                remainingLabel.classList.add('over');
+                remainingLabel.innerHTML = 'exceeded by:';
+                remainingElement.classList.add('over');
+                textarea.style.color = 'hsl(0,80%,60%)';
+                textarea.setAttribute('data-over', 'true');
+                setSubmitBtnDisabledStatus(true);
+                document.querySelector('.less').style.display = 'none'
+
+            }
+            else if (charCount < 250) {
+                remainingLabel.classList.remove('over');
+                remainingLabel.innerHTML = 'Remaining:';
+                remainingElement.classList.remove('over');
+                textarea.style.color = 'hsl(0,80%,60%)';
+                textarea.setAttribute('data-over', 'false');
+                setSubmitBtnDisabledStatus(false);
+                document.querySelector('.less').style.display = 'block'
+            }
+
+            else {
+                remainingLabel.classList.remove('over');
+                remainingLabel.innerHTML = 'Remaining:';
+                remainingElement.classList.remove('over');
+                textarea.style.color = 'hsl(0,0%,50%)';
+                textarea.setAttribute('data-over', 'false');
+                setSubmitBtnDisabledStatus(false);
+                document.querySelector('.less').style.display = 'none'
+
+            }
+        }
+
+        function initializeTextarea(container) {
+            const textarea = container.querySelector('.textarea');
+            const maxLength = parseInt(textarea.getAttribute('data-maxchars'), 10);
+            const charCount = textarea.value.length;
+            const charCountElement = container.querySelector('.charcount');
+            const remainingElement = container.querySelector('.remaining');
+
+            charCountElement.innerHTML = `${charCount}/${maxLength}`;
+            remainingElement.innerHTML = maxLength - charCount;
+            checkOverLimit(container, textarea, maxLength);
+
+            textarea.addEventListener('input', () => {
+                checkOverLimit(container, textarea, maxLength);
+            });
+
+            textarea.addEventListener('focus', () => {
+                setFocus(container);
+            });
+
+            textarea.addEventListener('blur', () => {
+                removeFocus(container);
+            });
+        }
+
+        function initializeAllTextareas() {
+            const textareaContainers = theform.querySelectorAll('.ta-container');
+            textareaContainers.forEach((container) => {
+                initializeTextarea(container);
+            });
+        }
+
+        initializeAllTextareas();
+
+    </script>
+</body>
+
+</html>

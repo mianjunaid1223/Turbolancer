@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>TurboLancer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=0.7">
+  <link rel="icon" type="image/png" href="/static/icon.png" />
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/b8b432d7d3.js" crossorigin="anonymous"></script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script
+    src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    const socket = io();
+
+
+
+
+    const theindexofelementtobechecked = []
+    const imageFormats = /\.(png|jpg|jpeg|gif|bmp|svg)$/i;
+    const websiteFormat = /^(http|https):\/\/[^\s/$.?#].[^\s]*$/i;
+    const specificPatternRegex = /\/turbolancer\/gett_image\/chats\/turbolancer_qazwsxedcrfvqwerty\/[0-9a-fA-F]{24}/;
+
+    function createLinkElement(link, type, timestamp) {
+      const element = document.createElement(type === 'image' ? 'img' : 'a');
+
+      if (type === 'image' || type === 'img') {
+        element.src = link;
+
+        element.onclick = function () {
+          view_image(link, timestamp);
+        };
+      } else if (type === 'website') {
+        element.href = link;
+        element.textContent = link;
+        element.target = '_blank';
+        element.style.color = 'rgb(0, 81, 255)'
+
+        element.addEventListener('mouseover', () => {
+          element.style.textDecoration = 'underline';
+        });
+
+        element.addEventListener('mouseout', () => {
+          element.style.textDecoration = 'none';
+        });
+      } else {
+        element.textContent = link;
+      }
+
+      return element;
+    }
+    function splitTextByMarker(text) {
+      const marker = "[|||__-_...-_=+~~+)(*@#$%#^^%&(&$!~~~#$%&,,<76576><hfghghfhgfg.gfh>?[{(TurboLancer)}]~))__|||] ";
+
+      if (text.includes(marker)) {
+        const parts = text.split(marker);
+        const firstPortion = parts[0];
+        const secondPortion = parts[1];
+
+        return {
+          firstPortion: firstPortion.trim(),
+          secondPortion: secondPortion.trim()
+        };
+      } else {
+        return null; // Marker not found in the text
+      }
+    }
+
+
+    function sanitizeHTMLAndCSS(inputText) {
+      // Replace HTML tags with their HTML entity equivalents
+      const sanitizedHTML = inputText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      // Remove any CSS within style attributes
+      const sanitizedCSS = sanitizedHTML.replace(/style="[^"]*"/g, '');
+
+      return sanitizedCSS;
+    }
+
+
+
+    function appendMessage(message, timestamp, sender, blocked_by, index, diff) {
+      const actulatime = timestamp;
+
+      function convertToTimeZone(inputTime) {
+        // Parse the input time string into a Date object
+        const inputDate = new Date(`${inputTime} UTC`);
+
+        // Get the user's local time zone
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // Convert to the user's local time zone
+        const localDate = new Date(inputDate.toLocaleString('en-US', { timeZone: userTimeZone }));
+
+        // Format the local date components
+        const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(localDate);
+        const day = localDate.getDate();
+        const year = localDate.getFullYear();
+        const hours = localDate.getHours();
+        const minutes = localDate.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        // Format the local time string
+        const formattedLocalTime = `${month} ${day}, ${year}, ${hours % 12}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+        return formattedLocalTime;
+      }
+
+
+      timestamp = convertToTimeZone(timestamp);
+      console.log(timestamp)
+      var textafter
+      var paragraph;
+      const messagesDiv = document.getElementById("messages");
+      const newMessageDiv = document.createElement("div");
+      const local = '{{_id}}';
+      const isCurrentUser = sender === local;
+      const fullemssage = message
+      const acutime = timestamp
+      newMessageDiv.className = isCurrentUser
+        ? 'mine messageses animate__animated animate__bounceInRight'
+        : 'yours messageses animate__animated animate__bounceInLeft';
+
+      const newInner = document.createElement("div");
+      const men = document.createElement("div");
+      const messt = document.createElement("div");
+      messt.className = "messt"
+      newInner.className = 'messagese last';
+      men.id = 'right';
+      men.innerHTML = '<span class="material-symbols-outlined">expand_more</span>';
+      men.style.color = '#ffff';
+
+      newInner.appendChild(men);
+      const result = splitTextByMarker(message)
+      if (result) {
+        message = result.firstPortion
+        textafter = result.secondPortion;
+
+      }
+
+      const imageFormats = /\.(png|jpg|jpeg|gif|bmp|svg)$/i;
+      const websiteFormat = /^(http|https):\/\/[^\s/$.?#].[^\s]*$/i;
+      let tbl;
+
+      let lastIndex = 0;
+      const imageLinks = [];
+      const simpleLinks = [];
+      const textNodes = [];
+      let loopCount = 0;
+
+      for (let lastIndex = 0; lastIndex < message.length; lastIndex++) {
+        let blockedByConditionMet
+        loopCount = index
+
+        if (blocked_by) {
+          let blockedByConditionMet = false;
+
+          blocked_by.forEach(node => {
+            if (node !== local) {
+              if (node.includes("h4d64bdy4b4hf74hhh44jfuff848vfn4u48f")) {
+                if (sender === '{{_id}}') {
+
+                  message = 'You deleted this message.';
+                } else {
+                  const remainingText = node.split(" ").slice(1).join(" ");
+                  message = ` ${remainingText} deleted this message.`;
+                }
+                blockedByConditionMet = true;
+                return;
+
+
+              }
+            }
+            else if (node === local) {
+              blockedByConditionMet = true;
+              message = `This message was deleted`;
+
+            }
+          });
+
+          if (blockedByConditionMet) {
+            messt.classList.add('deleted');
+            newMessageDiv.disabled = true;
+            newMessageDiv.classList.add('ar');
+            newMessageDiv.addEventListener("contextmenu", function (e) {
+              e.preventDefault();
+            });
+
+            newMessageDiv.addEventListener("mouseenter", function (e) {
+              e.preventDefault();
+            });
+          }
+        }
+
+
+        const specificPatternMatch = message.substring(lastIndex).match(specificPatternRegex);
+
+        if (specificPatternMatch) {
+          const specificLink = specificPatternMatch[0];
+          const specificPatternIndex = message.indexOf(specificLink, lastIndex);
+
+          if (specificPatternIndex > lastIndex) {
+            const textBeforeSpecific = message.substring(lastIndex, specificPatternIndex);
+            textNodes.push(document.createTextNode(textBeforeSpecific));
+          }
+
+          imageLinks.push(specificLink);
+          textNodes.push(createLinkElement(specificLink, 'image', timestamp));
+          lastIndex = specificPatternIndex + specificLink.length;
+        } else {
+          const base64Match = message.substring(lastIndex).match(/data:image\/(png|jpg|jpeg|gif|bmp|svg);base64,[^\s]+/);
+
+          if (base64Match) {
+            const base64Link = base64Match[0];
+            const base64Index = message.indexOf(base64Link, lastIndex);
+
+            if (base64Index > lastIndex) {
+              const textBeforeBase64 = message.substring(lastIndex, base64Index);
+              textNodes.push(document.createTextNode(textBeforeBase64));
+            }
+
+            imageLinks.push(base64Link);
+            lastIndex = base64Index + base64Link.length;
+          } else {
+            const linkMatch = message.substring(lastIndex).match(/(?:http|https):\/\/[^\s/$.?#].[^\s]*/);
+
+            if (linkMatch) {
+              const link = linkMatch[0];
+              const textBeforeLink = message.substring(lastIndex, lastIndex + linkMatch.index);
+
+              if (textBeforeLink) {
+                textNodes.push(document.createTextNode(textBeforeLink));
+              }
+
+              const linkType = imageFormats.test(link) ? 'image' : websiteFormat.test(link) ? 'website' : 'text';
+
+              if (linkType === 'image') {
+                imageLinks.push(link);
+              } else {
+                simpleLinks.push(link);
+              }
+
+              textNodes.push(createLinkElement(link, linkType));
+              lastIndex += linkMatch.index + link.length;
+            } else {
+              textNodes.push(document.createTextNode(message.substring(lastIndex)));
+              break;
+            }
+          }
+        }
+      }
+
+      textNodes.forEach(node => {
+        messt.appendChild(node);
+
+        newInner.appendChild(messt);
+
+
+      });
+      tbl = textNodes.map(node => node.textContent).join(' ')
+
+      if (textafter) {
+        tbl = textafter
+        paragraph = document.createElement("p");
+        function convertLinksToAnchors(text) {
+          // Regular expression to match URLs
+          const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+          // Replace all URLs with anchor elements
+          const replacedText = text.replace(urlRegex, (url) => {
+            return `<a class="afterblue" href="${url}" target="_blank">${url}</a>`;
+          });
+
+          return replacedText;
+        }
+        textaftere = convertLinksToAnchors(textafter)
+        paragraph.innerHTML = textaftere;
+        paragraph.title = "Click to Expand/Collaps the Text"
+        paragraph.classList.add('dotted')
+
+        $(paragraph).on("click", function () {
+          $(this).toggleClass("expandeddotted");
+          addLineBreaks('expandeddotted');
+
+        });
+        newInner.appendChild(paragraph);
+
+      }
+      const collectedData = {
+        imageLinks: imageLinks,
+        simpleLinks: simpleLinks,
+        textWithoutLinks: tbl,
+        sender: sender,
+        fullmsesage: fullemssage,
+        time: acutime,
+        index: index,
+        actulatime: actulatime
+      };
+
+      if (!messagesDiv.className.includes('ar')) {
+        newMessageDiv.dataset.collectedData = JSON.stringify(collectedData);
+        men.dataset.collectedData = JSON.stringify(collectedData);
+      }
+      else {
+        newMessageDiv.dataset.collectedData = JSON.stringify(removed);
+        men.dataset.collectedData = JSON.stringify(removed);
+      }
+      console.log(index)
+      theindexofelementtobechecked[0] = index;
+      newMessageDiv.classList.add(index)
+
+      const timestampDiv = document.createElement("div");
+      timestampDiv.className = 'timestamp';
+      timestampDiv.textContent = timestamp;
+      newInner.appendChild(timestampDiv);
+
+      newMessageDiv.appendChild(newInner);
+      messagesDiv.appendChild(newMessageDiv);
+      add();
+      check();
+
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      iimg = messagesDiv.querySelectorAll('.messt')
+      iimgcont = messagesDiv.querySelectorAll('.messt')
+      iimg.forEach(element => {
+        immgg = element.querySelectorAll('img')
+        if (result) {
+
+          if (immgg.length >= 4) {
+            element.classList.add('fourimg');
+          } else if (iimg.length < 4) {
+            if (messagesDiv.querySelectorAll('.messt.fourimg'))
+              element.classList.remove('fourimg');
+
+          }
+        }
+      });
+    }
+    function send_message() {
+      event.preventDefault();
+
+      console.log('clicked')
+      const messageInput = document.getElementById("message");
+      const currentTime = getCurrentTime();
+      const userId = '{{_id}}'
+      const chatRoomName = document.getElementById("send-btn").className;
+      const message = messageInput.value.trim();
+      if (message !== "") {
+        const d = new Date();
+        let diff = d.getTimezoneOffset();
+        length = document.querySelectorAll('.messt')
+        appendMessage(message, currentTime, userId, [], length.length + 1, diff);
+        socket.emit('sendMessage', { userId, chatRoomName, message, currentTime, diff });
+        messageInput.style.height = 'auto'
+        messageInput.value = ''; // Clear the input field after sending the message
+
+      }
+    }
+    function handleKeyDown(event) {
+      const enterKeyCode = 13;
+      const shiftKeyCode = 16;
+
+      if (event.keyCode === enterKeyCode && !event.shiftKey) {
+        send_message();
+        event.preventDefault();
+      }
+    }
+    function handleKeyDownim(event) {
+      const enterKeyCode = 13;
+      const shiftKeyCode = 16;
+
+      if (event.keyCode === enterKeyCode && !event.shiftKey) {
+        sendimage(document.getElementById('send-btnim'));
+        event.preventDefault();
+      }
+    }
+
+    socket.on('messagedeletedbyall', function (data) {
+      closethemodalauto();
+
+      console.log(data.by)
+      if (data.by.includes("h4d64bdy4b4hf74hhh44jfuff848vfn4u48f")) {
+
+
+        if (data.sender === '{{_id}}') {
+
+          closethemodalauto();
+          let classSelector = data.index;
+          console.log(data.index)
+          let newMessageDivs = document.getElementsByClassName(classSelector);
+          console.log(newMessageDivs)
+
+          let newMessageDiv = newMessageDivs[0];
+          let messt = newMessageDiv.querySelector('.messt');
+          messt.textContent = 'You deleted this message.';
+          del = document.querySelector(".delete");
+          del.innerHTML = 'Delete'
+          if (newMessageDiv) { // Check if newMessageDiv is defined
+            messt.classList.add('deleted');
+            newMessageDiv.disabled = true;
+            newMessageDiv.classList.add('ar');
+            newMessageDiv.addEventListener("contextmenu", function (e) {
+              e.preventDefault();
+            });
+
+            newMessageDiv.addEventListener("mouseenter", function (e) {
+              e.preventDefault();
+            });
+
+            console.log('Success!!');
+
+          } else {
+            console.log('Element not found');
+          }
+
+        }
+        else {
+          const remainingText = data.by.split(" ").slice(1).join(" ");
+
+          del = document.querySelector(".delete");
+          del.innerHTML = 'Delete'
+          closethemodalauto();
+          messt.textContent = ` ${remainingText} deleted this message.`;
+
+          let classSelector = data.index;
+          console.log(data.index)
+          let newMessageDivs = document.getElementsByClassName(classSelector);
+
+          let newMessageDiv = newMessageDivs[0];
+          if (newMessageDiv) { // Check if newMessageDiv is defined
+            messt.classList.add('deleted');
+            newMessageDiv.disabled = true;
+            newMessageDiv.classList.add('ar');
+            newMessageDiv.addEventListener("contextmenu", function (e) {
+              e.preventDefault();
+            });
+
+            newMessageDiv.addEventListener("mouseenter", function (e) {
+              e.preventDefault();
+            });
+
+            console.log('Success!!');
+
+          } else {
+            console.log('Element not found');
+          }
+        }
+      }
+    }
+    );
+
+    function closethemodalauto() {
+      box = document.querySelector(".box")
+      bg = document.querySelector(".bg")
+
+      del = document.querySelector(".delete");
+      del.innerHTML = 'Delete'
+      box.classList.add('out');
+      bg.classList.add('out');
+      setTimeout((() => {
+        box.style.display = "none";
+        bg.style.display = 'none'
+
+      }), 600)
+
+
+
+    }
+
+    socket.on('messagedeleted', function (data) {
+      console.log(data)
+      if (data.sender === '{{_id}}') {
+
+        closethemodalauto();
+        let classSelector = data.index;
+        console.log(data.index)
+        let newMessageDivs = document.getElementsByClassName(classSelector);
+
+        let newMessageDiv = newMessageDivs[0];
+        if (newMessageDiv) { // Check if newMessageDiv is defined
+          let messt = newMessageDiv.querySelector('.messt');
+          del = document.querySelector(".delete");
+          del.innerHTML = 'Delete'
+          messt.classList.add('deleted');
+          messt.classList.remove('fourimg');
+
+          newMessageDiv.disabled = true;
+          newMessageDiv.classList.add('ar');
+          newMessageDiv.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+          });
+
+          newMessageDiv.addEventListener("mouseenter", function (e) {
+            e.preventDefault();
+          });
+
+          messt.textContent = ' This message was deleted';
+          console.log('Success!!');
+
+        } else {
+          console.log('Element not found');
+        }
+
+      }
+    });
+
+    function closethemodalauto() {
+      box = document.querySelector(".box")
+      bg = document.querySelector(".bg")
+
+      box.classList.add('out');
+      bg.classList.add('out');
+
+      del = document.querySelector(".delete");
+      del.innerHTML = 'Delete'
+      setTimeout((() => {
+        box.style.display = "none";
+        bg.style.display = 'none'
+
+      }), 600)
+
+
+
+    }
+  </script>
+ <link rel="stylesheet" href="/static/chats.css">
+
+</head>
+
+<body class="darkmode">
+  <div class="grid">
+    <div class="contacts-bar">
+      <button id="menue" class="animate__animated animate__backInLeft " onclick="toggleSidebar()"><ion-icon
+          name="menu-outline"></ion-icon></button>
+      <div id="search">
+        <form class="form">
+          <label for="search">
+            <input data-title="search" onclick="document.querySelector('.contacts-bar').classList.add('expanded')"
+              autocomplete="off" required="" placeholder="search..." id="search" class="searchfilter tooltip"
+              type="text">
+            <div class="icon close-btn">
+              <svg stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg" class="swap-on">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linejoin="round" stroke-linecap="round">
+                </path>
+              </svg>
+              <svg stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg" class="swap-off">
+                <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linejoin="round" stroke-linecap="round"></path>
+              </svg>
+            </div>
+
+          </label>
+        </form>
+      </div>
+      <div id='container_contect'>
+        <div class="loader"></div>
+        <div id="no_results_message" class="tooltip" data-tooltip="No Search results found!" style="display: none;">
+          No Search results found!
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div id="cinfo">
+
+      </div>
+      <div id="chat-room">
+        <div id="messages"></div>
+        <div class="containeree">
+          <div class="ttop">
+            <div class="error_msg"></div>
+            <button>&times;</button>
+          </div>
+
+          <div class="imgprov"></div>
+          <div class="imgsendcontrol">
+            <form class="messageform" id="bb1q2w3e4r5t6y|7u8ii9o0p-&&&&&|I_D+3477bb">
+              <textarea id="messageim" placeholder="Capiton (optional)" rows="1"
+                onkeydown="handleKeyDownim(event)"></textarea>
+
+            </form>
+            <button id="send-btnim" onclick="sendimage(this)" type="submit">
+              <ion-icon name="send"></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <div id="control">
+
+          <div data-tooltip="This is the tooltip content" class="btn_upload none">
+            <input type="file" id="upload_file" name="file_upload" multiple accept=".jpg,.gif,.png">
+            <span class="material-symbols-outlined">
+              add
+            </span>
+          </div>
+          <form class="messageform" id="bb1q2w3e4r5t6y|7u8ii9o0p-&&&&&|I_D+3477bb">
+            <textarea id="message" placeholder="Type your message" rows="1" onkeydown="handleKeyDown(event)"></textarea>
+
+          </form>
+          <button id="send-btn" onclick="send_message()" type="submit">
+            <ion-icon name="send"></ion-icon>
+          </button>
+        </div>
+      </div>
+      <div class="overlay">
+
+        <img id="logoch" class="alogo" src="/static/dark_logo.png" alt="logo">
+        <p class="intext">Elevate team productivity with Turbolancer chat, facilitating seamless and swift
+          communication. Experience a dynamic platform that streamlines workflows and connects colleagues effortlessly.
+        </p>
+      </div>
+
+    </div>
+
+
+
+  </div>
+  <ul class="contextMenu" id="customContextMenu" style="display: none;">
+    <li data-tooltip="Copy message" class="contextMenu-item copy-message tooltip" style="display: none;">
+      <h3 class="tooltip" data-tooltip="This is the tooltip content">
+        <ion-icon name="copy-outline"></ion-icon>&nbsp;
+        Copy message
+      </h3>
+    </li>
+    <li class="contextMenu-item copy-link" style="display: none;">
+      <h3>
+        <ion-icon name="copy-outline"></ion-icon>&nbsp;
+        Copy link
+      </h3>
+    </li>
+    <li class="collapsible contextMenu-item copy-links" style="display: none;">
+      <h3>
+        <ion-icon name="open-outline"></ion-icon>&nbsp;
+        select to Copy link
+
+      </h3>
+    </li>
+    <div class="content" style="display: none;"></div>
+    <li class="contextMenu-item open-link-in-tab" style="display: none;">
+      <a href="#" target="_blank">
+        <h3>
+          <ion-icon name="open-outline"></ion-icon>&nbsp;
+          Open link in new tab
+        </h3>
+      </a>
+    </li>
+    <li class="collapsible contextMenu-item open-link-in-tabs" style="display: none;">
+      <h3>
+        <ion-icon name="open-outline"></ion-icon>&nbsp;
+        select to Open link in new tab
+      </h3>
+    </li>
+    <div class="content" style="display: none;"></div>
+
+
+
+    <li class="contextMenu-item copy-image-link" style="display: none;">
+      <h3>
+        <ion-icon name="copy-outline"></ion-icon>&nbsp;
+        Copy image link
+      </h3>
+    </li>
+    <li class="collapsible contextMenu-item copy-image-links" style="display: none;">
+      <h3>
+        <ion-icon name="copy-outline"></ion-icon>&nbsp;
+        select to Copy image link
+      </h3>
+    </li>
+    <div class="content imgcontent" style="display: none;"></div>
+
+    <li class="contextMenu-item view-image" style="display: none;">
+      <h3>
+        <ion-icon name="eye-outline"></ion-icon>&nbsp;
+        View image
+      </h3>
+    </li>
+    <li class="collapsible contextMenu-item view-images" style="display: none;">
+      <h3>
+        <ion-icon name="images-outline"></ion-icon>&nbsp;
+        select to View image
+
+      </h3>
+    </li>
+    <div class="content imgcontent" style="display: none;"></div>
+
+    <li class="collapsible contextMenu-item download-images" style="display: none;">
+      <h3>
+        <ion-icon name="cloud-download-outline"></ion-icon>&nbsp;
+        select to Download image
+
+
+      </h3>
+    </li>
+    <div class="content imgcontent" style="display: none;"></div>
+
+    <li class="contextMenu-item download-image">
+      <h3>
+        <ion-icon name="cloud-download-outline"></ion-icon>&nbsp;
+        Download image
+      </h3>
+    </li>
+
+
+
+    <li class="contextMenu-item additional-option" style="display: none;">
+      <h3>
+        <ion-icon name="trash-outline"></ion-icon>&nbsp;
+        Delete for Me
+      </h3>
+    </li>
+    <li class="contextMenu-item additional-optionme" style="display: none;">
+      <h3>
+        <ion-icon name="trash-outline"></ion-icon>&nbsp;
+        Delete for everyone
+      </h3>
+    </li>
+  </ul>
+
+  <div class="bg">
+    <div class="box animate__animated animate__zoomIn animate__bounceIn animate_faster">
+      <span>
+        <h2 id="h2del">Delete message?</h2>
+        <p>Deleting a message for yourself allows you to delete your copy of messages you've sent or received.
+          <br><br> This has no effect on your recipients' chats.
+        </p>
+      </span>
+      <div class="button_container">
+        <button class="cancle">&nbsp;Cancle</button>
+        <button class="delete"> <ion-icon name="trash-outline"></ion-icon>&nbsp;Delete</button>
+      </div>
+    </div>
+
+  </div>
+  </ul>
+  <div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <div class="imgouter">
+      <img class="modal-content" title="Scroll to ZommIn/Out" id="img01">
+    </div>
+    <div id="caption"></div>
+  </div>
+
+  <div class="dragover"></div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script
+    src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    setInterval(() => {
+      const theme = localStorage.getItem('themeofturbolancer')
+      if (theme == 'on') {
+        document.body.classList.add('darkmode')
+      } else {
+        if (document.querySelector(".darkmode")) {
+          document.body.classList.remove('darkmode')
+        }
+        else {
+          return true
+        }
+      }
+    }, 500);
+
+
+    var modal = document.getElementById("myModal");
+
+    var img = document.getElementById("myImg");
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+
+    function view_image(src, alt) {
+      document.querySelector('.modal').classList.remove('out')
+      document.querySelector('.modal-content').classList.remove('out')
+      document.querySelector('#caption').classList.remove('out')
+      modal.style.display = "block";
+      modalImg.src = src;
+      captionText.innerHTML = alt;
+    }
+    function check() {
+      var images = document.querySelectorAll(".messagese img");
+
+      images.forEach(function (image) {
+        image.addEventListener("load", function () {
+          image.classList.add("loaded");
+        });
+      })
+    }
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+      document.querySelector('.modal').classList.add('out')
+      document.querySelector('.modal-content').classList.add('out')
+      document.querySelector('#caption').classList.add('out')
+
+      setTimeout(function () {
+
+        modal.style.display = "none";
+      }, 400);
+
+    }
+    modal.onclick = function () {
+      document.querySelector('.modal').classList.add('out')
+      document.querySelector('.modal-content').classList.add('out')
+      document.querySelector('#caption').classList.add('out')
+
+      setTimeout(function () {
+
+        modal.style.display = "none";
+      },400);
+
+    }
+
+
+    const btnUpload = document.querySelector("#upload_file");
+    const errorMsg = document.querySelector(".error_msg");
+    const uploadedView = document.querySelector(".imgprov");
+    const textInput = document.body;
+    const imageContainer = document.body;
+
+    textInput.addEventListener('paste', event => {
+      const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+      handleClipboardItems(items);
+    });
+
+    imageContainer.addEventListener('dragover', event => {
+      event.preventDefault();
+      document.querySelector('.dragover').style.display = 'block'
+    });
+    window.addEventListener('mouseout', event => {
+      // Check if the cursor left the page
+      if (event.toElement === null && event.relatedTarget === null) {
+        // Your code to handle cursor leaving the page here
+        document.querySelector('.dragover').style.display = 'none'
+      }
+    });
+
+    imageContainer.addEventListener('drop', event => {
+      event.preventDefault();
+      document.querySelector('.dragover').style.display = 'none'
+
+      const items = event.dataTransfer.items;
+      handleClipboardItems(items);
+    });
+
+    function handleClipboardItems(items) {
+
+
+      console.log('uploadinding image.')
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          const imageURL = URL.createObjectURL(blob);
+
+          const imageElement = document.createElement('img');
+          imageElement.src = imageURL;
+          uploadedView.appendChild(imageElement);
+          uploadedView.scrollTop = uploadedView.scrollHeight;
+          iimg = uploadedView.querySelectorAll('img');
+          if (iimg.length >= 8) {
+            uploadedView.classList.add('eightimg');
+          } else if (iimg.length >= 4 && iimg.length < 8) {
+            uploadedView.classList.add('fourimg');
+          } else if (iimg.length < 4) {
+            uploadedView.classList.remove('fourimg');
+            uploadedView.classList.remove('eightimg');
+
+          }
+
+          document.querySelector('#control').classList.add('im')
+          document.querySelector('.containeree').classList.add('im')
+        }
+      }
+    }
+    btnUpload.addEventListener("change", function (e) {
+      console.log('uploadinding image.')
+
+      document.querySelector('#control').classList.add('im')
+      document.querySelector('.containeree').classList.add('im')
+      const ext = btnUpload.value.split('.').pop().toLowerCase();
+      if (['gif', 'png', 'jpg', 'jpeg'].indexOf(ext) === -1) {
+        errorMsg.textContent = "Not an Image...";
+      } else {
+        errorMsg.textContent = "";
+        const fileInput = e.target; // Assuming e.target is your file input element
+        const fileList = Array.from(fileInput.files);
+
+        fileList.forEach(file => {
+          const uploadedFile = URL.createObjectURL(file);
+          const imgElement = document.createElement("img");
+          imgElement.src = uploadedFile;
+          uploadedView.appendChild(imgElement);
+        });
+
+        // After adding the images, you can apply your logic for adding classes based on the image count
+        iimg = uploadedView.querySelectorAll('img');
+        if (iimg.length >= 8) {
+          uploadedView.classList.add('eightimg');
+        } else if (iimg.length >= 4 && iimg.length < 8) {
+          uploadedView.classList.add('fourimg');
+        }
+
+
+      }
+    });
+
+
+    const fileRemoveBtn = document.querySelector(".ttop button");
+    fileRemoveBtn.addEventListener("click", function (e) {
+
+      const uploadedView = document.querySelector(".imgprov");
+      document.querySelector('#control').classList.remove('im')
+      document.querySelector('.containeree').classList.remove('im')
+      uploadedView.innerHTML = ''
+
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      add();
+    });
+
+    function add() {
+      const contextMenu = document.getElementById("customContextMenu");
+      const targetNodes = document.querySelectorAll("#right");
+
+
+      function openContextMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        const co = document.querySelectorAll('.content')
+        for (i = 0; i < co.length; i++) {
+          co[i].innerHTML = ''
+        }
+        contextMenu.style.display = "block";
+        contextMenu.classList.remove('show');
+
+        contextMenu.style.display = "block";
+
+        const men = e.currentTarget;
+        const collectedData = men.dataset.collectedData;
+        const data = JSON.parse(collectedData);
+
+
+
+        const contextMenuItems = contextMenu.querySelectorAll(".contextMenu-item");
+
+        contextMenuItems.forEach(item => {
+          item.style.display = "none";
+        });
+        if (data.imageLinks.length > 1) {
+          const copyImageItem = contextMenu.querySelector(".copy-image-links");
+          copyImageItem.style.display = "block";
+
+          const content = copyImageItem.nextElementSibling;
+          content.style.display = 'block';
+          content.innerHTML = '';
+
+          data.imageLinks.forEach(imageLink => {
+            const img = document.createElement("img");
+            const div = document.createElement("div");
+            img.style.maxHeight = "40px";
+            img.src = imageLink;
+
+            div.addEventListener('click', async function () {
+              this.style.userSelect = 'all'; // Enable text selection
+              this.style.webkitUserSelect = 'all'; // For Safari compatibility
+
+              const range = document.createRange();
+              range.selectNodeContents(this);
+              const selection = window.getSelection();
+              selection.removeAllRanges();
+              selection.addRange(range);
+
+              try {
+                // Get the image src and copy to clipboard
+                await navigator.clipboard.writeText(imageLink);
+                // Provide user feedback for successful copy
+                // For example: alert("Image link copied to clipboard!");
+              } catch (error) {
+                console.error('Copy failed:', error);
+              }
+
+              // Clean up by clearing the selection
+              selection.removeAllRanges();
+              this.style.userSelect = 'none';
+              this.style.webkitUserSelect = 'none';
+            });
+
+            div.appendChild(img);
+            div.classList.add('asimg')
+            content.appendChild(div);
+          });
+
+          copyImageItem.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+        } else if (data.imageLinks.length > 0) {
+          const copyImageItem = contextMenu.querySelector(".copy-image-link"); // Define copyImageItem here
+          copyImageItem.style.display = "block";
+
+          copyImageItem.addEventListener("click", async () => {
+            copyImageItem.style.userSelect = 'all'; // Enable text selection
+            copyImageItem.style.webkitUserSelect = 'all'; // For Safari compatibility
+
+            const range = document.createRange();
+            range.selectNodeContents(copyImageItem); // Select the content of copyImageItem
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            try {
+              // Get the image src and copy to clipboard
+              await navigator.clipboard.writeText(data.imageLinks[0]);
+              // Provide user feedback for successful copy
+              // For example: alert("Image link copied to clipboard!");
+            } catch (error) {
+              console.error('Copy failed:', error);
+            }
+
+            // Clean up by clearing the selection
+            selection.removeAllRanges();
+            copyImageItem.style.userSelect = 'none';
+            copyImageItem.style.webkitUserSelect = 'none';
+          });
+        }
+
+
+        if (data.imageLinks.length > 1) {
+          const viewImageItems = contextMenu.querySelector(".view-images");
+
+          viewImageItems.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+          viewImageItems.style.display = "block";
+          var content = viewImageItems.nextElementSibling;
+
+          content.style.display = 'block';
+          content.innerHTML = '';
+
+          data.imageLinks.forEach(imageLink => {
+            const img = document.createElement("img");
+            const div = document.createElement("div");
+
+            img.style.maxHeight = "40px";
+            img.src = imageLink;
+
+            div.appendChild(img);
+            div.classList.add('asimg')
+            div.addEventListener("click", (e) => {
+              view_image(imageLink, data.time);
+            });
+            content.appendChild(div);
+
+          });
+
+        }
+        else if (data.imageLinks.length > 0) {
+          const viewImageItem = contextMenu.querySelector(".view-image");
+          viewImageItem.style.display = "block";
+          viewImageItem.addEventListener("click", () => {
+            view_image(data.imageLinks[0], data.time);
+          });
+        }
+        if (data.imageLinks.length > 1) {
+          const downloadImageItem = contextMenu.querySelector(".download-images");
+
+          downloadImageItem.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+          downloadImageItem.style.display = "block";
+          var content = downloadImageItem.nextElementSibling;
+
+          content.style.display = 'block';
+          content.innerHTML = '';
+
+          data.imageLinks.forEach(imageLink => {
+            const img = document.createElement("img");
+            const div = document.createElement("div");
+            const a = document.createElement("a");
+            img.style.maxHeight = "40px";
+            img.src = imageLink;
+            div.className = 'asimg'
+
+            div.onclick = async function () {
+              a.target = "_blank"
+              a.href = imageLink
+              a.download = true;
+              a.click()
+
+            };
+            a.appendChild(img);
+            div.appendChild(a);
+            content.appendChild(div);
+          });
+        }
+        else if (data.imageLinks.length == 1) {
+          const downloadImageItem = contextMenu.querySelector(".download-image");
+          downloadImageItem.style.display = "block";
+
+
+          downloadImageItem.addEventListener("click", () => {
+            ab = document.createElement('a')
+            let url = data.imageLinks[0]
+            console.log(`Downloading ${url}`)
+            ab.setAttribute('href', url)
+            ab.target = "_blank"
+            ab.download = true
+            // dispatch click event on the element 
+            // so that it can be handled by any listeners attached to this DOM node:
+            document.body.appendChild(ab)
+            ab.click()
+            setTimeout(() => {
+              ab.remove()
+            }, 500)
+
+          });
+
+
+        }
+
+        if (data.simpleLinks.length > 1) {
+          const openLinkInTabItems = contextMenu.querySelector(".open-link-in-tabs");
+
+          openLinkInTabItems.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+
+          openLinkInTabItems.style.display = "block";
+          const content = openLinkInTabItems.nextElementSibling;
+
+          content.style.display = 'block';
+          content.innerHTML = '';
+
+          data.simpleLinks.forEach(simpleLink => {
+            const a = document.createElement("a");
+            const div = document.createElement("div");
+            const h3 = document.createElement("h3");
+            const icon = document.createElement("ion-icon"); // Create the icon element
+            icon.setAttribute("name", "open-outline"); // Set the icon name attribute
+            h3.appendChild(icon); // Append the icon to the h3 element
+            h3.appendChild(document.createTextNode('\u00A0')); // Add a non-breaking space
+            a.href = simpleLink; // Corrected 'herf' to 'href'
+            a.textContent = simpleLink; // Display the link text
+            a.target = '_blank';
+            h3.id = 'cta'
+            h3.appendChild(a);
+            div.appendChild(h3);
+            content.appendChild(div);
+          });
+        } else if (data.simpleLinks.length == 1) {
+          const openLinkInTabItem = contextMenu.querySelector(".open-link-in-tab");
+
+          openLinkInTabItem.style.display = "block";
+          openLinkInTabItem.addEventListener("click", (e) => {
+            openLinkInTabItem.disabled = true;
+            openLinkInTabItem.querySelector('a').href = data.simpleLinks[0]
+
+            openLinkInTabItem.disabled = false;
+
+          });
+
+        }
+        if (data.simpleLinks.length > 1) {
+          const copyLinkItems = contextMenu.querySelector(".copy-links");
+
+          copyLinkItems.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+
+          copyLinkItems.style.display = "block";
+          const content = copyLinkItems.nextElementSibling;
+
+          content.style.display = 'block';
+          content.innerHTML = '';
+          copyLinkItems.addEventListener("click", () => {
+            e.stopPropagation();
+          });
+          data.simpleLinks.forEach(simpleLink => {
+            const div = document.createElement("div");
+            div.classList.add('link-container'); // Add a class for styling if needed
+
+            const h3 = document.createElement("h3");
+            h3.id = 'cta'; // Moved the ID assignment here for consistency
+
+            const icon = document.createElement("ion-icon");
+            icon.setAttribute("name", "copy-outline");
+
+            const a = document.createElement("span");
+            a.textContent = simpleLink;
+            h3.appendChild(icon);
+            h3.appendChild(document.createTextNode('\u00A0'));
+            h3.appendChild(a);
+
+            a.addEventListener('click', function () {
+              this.style.userSelect = 'all'; // Enable text selection
+              this.style.webkitUserSelect = 'all'; // For Safari compatibility
+
+              const range = document.createRange();
+              range.selectNodeContents(this);
+              const selection = window.getSelection();
+              selection.removeAllRanges();
+              selection.addRange(range);
+
+              try {
+                // Copy the selected text to the clipboard
+                document.execCommand('copy');
+                // Optionally, provide user feedback for successful copy
+                // For example: alert("Link copied to clipboard!");
+              } catch (error) {
+                console.error('Copy failed:', error);
+              }
+
+              // Clean up by clearing the selection
+              selection.removeAllRanges();
+              this.style.userSelect = 'none';
+              this.style.webkitUserSelect = 'none';
+            });
+
+            div.appendChild(h3);
+            content.appendChild(div);
+          });
+
+        } else if (data.simpleLinks.length == 1) {
+          const copyLinkItem = contextMenu.querySelector(".copy-link");
+          copyLinkItem.style.display = "block";
+
+          const anchorElement = data.simpleLinks[0]; // Assuming data.simpleLinks contains anchor elements
+
+          if (anchorElement && copyLinkItem) {
+            copyLinkItem.addEventListener('click', () => {
+
+              navigator.clipboard.writeText(anchorElement)
+                .then(() => {
+                  // Successful copy
+                  console.log('Link copied to clipboard:', anchorElement);
+                })
+                .catch(error => {
+                  console.error('Copy failed:', error);
+                });
+            });
+          }
+        }
+        if (data.sender === '{{_id}}') {
+          const additionalOptionItemMine = contextMenu.querySelector(".additional-optionme");
+          additionalOptionItemMine.style.display = 'block';
+          additionalOptionItemMine.onclick = function () {
+            bg = document.querySelector(".bg")
+            box = document.querySelector(".box")
+            box.querySelector('h2').textContent = 'Delete message for Everyone?'
+            box.querySelector('p').innerHTML = "Deleting a message for all participants permits you to erase your sent messages from everyone's view. <br><br>  recipients will no longer have access to the message."
+
+            bg.style.display = 'grid'
+
+            box.classList.remove('out');
+            bg.classList.remove('out');
+            box.style.display = 'block'
+            cancle = document.querySelector(".cancle")
+            addEventListenerOnce(cancle, "click", closethemodal);
+            del = document.querySelector(".delete")
+            del.onclick = function () {
+
+              del.innerHTML = '<section class="dots-container">  <div class="dot"></div>  <div class="dot"></div>  <div class="dot"></div>  <div class="dot"></div>  <div class="dot"></div></section>';
+              let sender = '{{_id}}';
+              let message = data.fullmsesage;
+              let time = data.actulatime;
+              let index = data.index;
+              console.log(data.actulatime)
+              let type = localStorage.getItem('bb1q2w3e4r5t6y7u8iisd9o')
+
+              let chatroomname = document.getElementById('send-btn').className;
+
+              socket.emit('delete_message_from_evryone', {
+                sender: sender,
+                message: message,
+                type: type,
+
+                time: time,
+                index: index,
+                chatroomname: chatroomname
+              });
+            }
+
+          }
+        }
+
+        const additionalOptionItem = contextMenu.querySelector(".additional-option");
+
+        additionalOptionItem.style.display = "block";
+        additionalOptionItem.onclick = function () {
+          bg = document.querySelector(".bg")
+          bg.style.display = 'grid'
+          box = document.querySelector(".box")
+
+          box.querySelector('h2').textContent = 'Delete message for Me?'
+          box.querySelector('p').innerHTML = "Deleting a message for yourself allows you to delete your copy of messages you've sent or received.<br><br> This has no effect on your recipients' chats."
+          box.classList.remove('out');
+          bg.classList.remove('out');
+          box.style.display = 'block'
+          cancle = document.querySelector(".cancle")
+          addEventListenerOnce(cancle, "click", closethemodal);
+          del = document.querySelector(".delete");
+          del.onclick = function () {
+            del.innerHTML = '<section class="dots-container">  <div class="dot"></div>  <div class="dot"></div>  <div class="dot"></div>  <div class="dot"></div>  <div class="dot"></div></section>';
+            let sender = '{{_id}}';
+            let message = data.fullmsesage;
+            let time = data.actulatime;
+            let index = data.index;
+            console.log(data.actulatime)
+
+            let chatroomname = document.getElementById('send-btn').className;
+
+            socket.emit('delete_message', {
+              sender: sender,
+              message: message,
+              time: time,
+              index: index,
+              chatroomname: chatroomname
+            });
+          }
+
+        }
+
+
+
+        function closethemodal() {
+          box = document.querySelector(".box")
+          bg = document.querySelector(".bg")
+
+          box.classList.add('out');
+          bg.classList.add('out');
+          setTimeout((() => {
+            box.style.display = "none";
+            bg.style.display = 'none'
+
+          }), 600)
+
+
+
+        }
+
+
+
+        if (typeof data.textWithoutLinks === "string" && data.textWithoutLinks.trim() !== "") {
+          const copyMessageItem = contextMenu.querySelector(".copy-message");
+
+          copyMessageItem.style.display = "block";
+
+          copyMessageItem.addEventListener("click", () => {
+            const anchorElement = data.textWithoutLinks; // Assuming data.simpleLinks contains anchor elements
+
+
+            navigator.clipboard.writeText(anchorElement)
+              .then(() => {
+                // Successful copy
+                console.log('Link copied to clipboard:', anchorElement);
+              })
+              .catch(error => {
+                console.error('Copy failed:', error);
+              });
+          });
+
+        }
+
+
+
+        const posX = Math.min(e.clientX, window.innerWidth - contextMenu.offsetWidth - contextMenu.offsetWidth / 3);
+        const posY = Math.min(e.clientY, window.innerHeight - contextMenu.offsetHeight - contextMenu.offsetHeight / 3);
+
+        contextMenu.style.top = `${posY}px`;
+        contextMenu.style.left = `${posX}px`;
+
+      };
+      function addEventListenerOnce(element, eventType, callback) {
+        if (!element.getAttribute('data-event-listener')) {
+          element.addEventListener(eventType, callback);
+          element.setAttribute('data-event-listener', 'true');
+        }
+      }
+      targetNodes.forEach((target) => {
+        addEventListenerOnce(target, "click", openContextMenu);
+        addEventListenerOnce(target, "contextmenu", openContextMenu);
+      });
+
+      const menopen = document.querySelectorAll(".messageses");
+
+      menopen.forEach((target) => {
+        addEventListenerOnce(target, "contextmenu", openContextMenu);
+      });
+
+      document.addEventListener("click", () => {
+        contextMenu.classList.add("show");
+        co = document.querySelectorAll('.content')
+        for (i = 0; i < co.length; i++) {
+          const collapsibleElements = document.querySelectorAll('.collapsible');
+
+          collapsibleElements.forEach(element => {
+            element.classList.remove('active');
+          });
+          co[i].style.display = 'none'
+        }
+        setTimeout(() => {
+          contextMenu.style.display = "none";
+
+        }, 500);
+      });
+
+      window.addEventListener("wheel", () => {
+        contextMenu.classList.add("show");
+        co = document.querySelectorAll('content')
+        const collapsibleElements = document.querySelectorAll('.collapsible');
+
+        collapsibleElements.forEach(element => {
+          element.classList.remove('active');
+        });
+
+        for (i = 0; i < co.length; i++) {
+          co[i].style.display = 'none'
+        }
+        setTimeout(() => {
+          contextMenu.style.display = "none";
+        }, 500);
+      });
+    }
+
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.contacts-bar');
+      sidebar.classList.toggle('expanded');
+    }
+  </script>
+
+
+  <script>
+    document.getElementById('message').addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+    document.getElementById('messageim').addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    function getCurrentTime() {
+      const utcTime = new Date().toISOString();
+
+      const formattedTime = new Intl.DateTimeFormat('en-US', {
+        year: '2-digit', // Add 'year' option to display the last two digits of the year
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZone: 'UTC',
+      }).format(new Date(utcTime));
+
+      console.log(formattedTime);
+
+      return formattedTime;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Prompt the user to enter the chat room name
+      var coll = document.querySelectorAll(".collapsible");
+
+      for (var i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+          // Remove "active" class from all collapsible elements
+          var allCollapsibles = document.querySelectorAll(".collapsible");
+          for (var j = 0; j < allCollapsibles.length; j++) {
+            if (allCollapsibles[j] !== this) {
+              allCollapsibles[j].classList.remove("active");
+            }
+          }
+
+          // Toggle "active" class for the clicked element
+          this.classList.toggle("active");
+        });
+      }
+
+
+      const userId = '{{_id}}'
+      account = 'd'
+      console.log(userId)
+
+      socket.emit('join', { userId, account });
+
+      socket.on('join_response', function (data) {
+        if (data.status === "USER_NOT_FOUND") {
+          alert("User not found!");
+        } else if (data.status === "DUPLICATE") {
+          alert("Chat room name already exists!");
+        } else {
+          const names = data.name;
+          const imgs = data.imgs;
+          const chids = data.chid;
+          console.log(imgs);
+          const contactList = document.querySelector('#container_contect');
+          contactList.querySelector('.loader').remove()
+
+          for (let i = 0; i < names.length; i++) {
+            const user = names[i];
+            const img = imgs[i];
+            const chid = chids[i]
+            /* Define the SVG code */
+            const svgCode = `
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: transparent; display: block;" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+  <circle cx="50" cy="50" r="25" stroke-width="4" stroke="#00b609" stroke-dasharray="39.269908169872416 39.269908169872416" fill="none" stroke-linecap="round">
+    <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="2.0408163265306123s" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform>
+  </circle>
+</svg>
+
+`;
+
+            const contactDiv = document.createElement('div');
+            const imcover = document.createElement('div');
+            contactDiv.classList.add('contact');
+            contactDiv.classList.add('animate__animated');
+            contactDiv.classList.add('animate__fadeIn');
+            contactDiv.id = chid;
+            contactDiv.addEventListener('click', function () { getMessages(this); });
+            imcover.classList.add('profile-pic');
+            imcover.classList.add('parent');
+
+            imcover.innerHTML = svgCode;
+
+            const profilePic = document.createElement('img');
+            profilePic.src = img;
+            profilePic.style.borderRadius = '50px';
+            profilePic.style.width = '50px';
+            profilePic.style.height = '50px';
+            profilePic.classList.add('animate__animated');
+            profilePic.classList.add('animate__fadeIn');
+            profilePic.alt = 'Profile Picture';
+            const userName = document.createElement('span');
+            userName.classList.add('user-name');
+            userName.classList.add('animate__animated');
+            userName.classList.add('animate__flipInY');
+            userName.textContent = user;
+
+            imcover.appendChild(profilePic);
+
+            contactDiv.appendChild(imcover);
+
+            contactDiv.appendChild(userName);
+
+            contactList.appendChild(contactDiv);
+
+          }
+
+        }
+      });
+
+
+      socket.on('newMessage', (message) => {
+        const iiii = document.querySelectorAll('.messt').length;
+
+        const chatroomname = document.getElementById('send-btn').className;
+
+        if (message.ch === chatroomname) {
+          if (message.sender === '{{_id}}') {
+            if (iiii == theindexofelementtobechecked[0]) {
+              console.log('sended');
+            }
+            else {
+              console.log('not you');
+              appendMessage(message.message, message.timestamp, message.sender, [], iiii, message.diff);
+            }
+          }
+          else {
+            console.log('you');
+            appendMessage(message.message, message.timestamp, message.sender, [], iiii, message.diff);
+          }
+        }
+      });
+
+      function getMessages(x) {
+        xyz = document.querySelectorAll('.contact')
+        xyz.forEach(item => {
+          item.classList.remove('active')
+        })
+        x.classList.add('active')
+
+        const chatRoomElement = document.getElementById('messages');
+        if (chatRoomElement) {
+          chatRoomElement.innerHTML = '<div class="loader"></div>';
+        } else {
+          console.error("Element 'chat-room' not found.");
+        }
+        document.getElementById('cinfo').innerHTML = '';
+        input = document.querySelectorAll('input')
+
+        input.forEach(item => {
+          item.value = ''
+
+        })
+
+        document.querySelector('#message').classList.remove('none-con')
+        document.querySelector('#control').classList.remove('im')
+        document.querySelector('#send-btn').classList.remove('none-con')
+        document.querySelector('.btn_upload').classList.add('none')
+
+        const overlay = document.querySelector('.overlay');
+
+        if (overlay) {
+          overlay.classList.add('animate__animated');
+          overlay.classList.add('animate__zoomOut');
+
+          setTimeout(() => {
+            overlay.remove();
+          }, 1000);
+        }
+
+        fetch('/get_messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            chat_room_name: x.id,
+          }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            document.getElementById('messages').innerHTML = '';
+            document.getElementById('send-btn').className = x.id;
+            if ('messages' in data) {
+              const cinfo = document.querySelector('#cinfo');
+              cinfo.innerHTML = ''; // Clear existing content before appending new elements
+
+              const imgElement = x.querySelector('.parent');
+              const h2Element = x.querySelector('.user-name');
+
+              // Clone the elements
+              const imgClone = imgElement.cloneNode(true);
+              const h2Clone = h2Element.cloneNode(true);
+
+              // Append the cloned elements to #cinfo
+              cinfo.appendChild(imgClone);
+              cinfo.appendChild(h2Clone);
+
+              const messages = data.messages;
+              const times = data.time;
+              const sender = data.sender;
+              const blb = data.blb;
+
+              // Append retrieved messages to the chat room
+              for (let i = 0; i < messages.length; i++) {
+                appendMessage(messages[i], times[i], sender[i], blb[i], i);
+              }
+            } else {
+              console.error('Error fetching messages: Invalid response format');
+            }
+          })
+          .catch(error => console.error('Error fetching messages:', error));
+
+
+      }
+    });
+
+
+    function sendimage(x) {
+      x.style.pointerEvents = 'none';
+      console.log(document.getElementById('messageim').value)
+      const value = document.getElementById('messageim').value;
+      console.log('clicked');
+
+      const uploadedView = document.querySelector(".imgprov");
+      const uploadedViewimg = document.querySelectorAll(".imgprov img");
+      document.querySelector('#control').classList.remove('im');
+      document.querySelector('.containeree').classList.remove('im');
+      document.getElementById('messageim').value = ''
+      uploadedView.innerHTML = '';
+      const d = new Date();
+      let diff = d.getTimezoneOffset();
+      console.log(diff)
+      const currentTime = getCurrentTime();
+      const userId = '{{_id}}';
+      const chatRoomName = document.getElementById("send-btn").classList[0];
+
+      const imageLinks = []; // To store the links of uploaded images
+
+      let uploadCount = 0; // To track the number of images uploaded
+
+      uploadedViewimg.forEach(function (uploadedViewimgsub) {
+        const imageBlobPromise = fetch(uploadedViewimgsub.src)
+          .then(response => response.blob());
+
+        imageBlobPromise.then(imageBlob => {
+          const newImageFile = new File([imageBlob], 'newFileName.jpg', { type: 'image/jpeg' });
+          console.log(newImageFile);
+
+          var formData = new FormData();
+          formData.append("image", newImageFile);
+          formData.append("chatroom", chatRoomName);
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "/send_IMAGE");
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              if (xhr.status === 200) {
+                x.style.pointerEvents = 'all';
+                console.log(document.getElementById('messageim').value)
+
+                var response = JSON.parse(xhr.responseText);
+                const imageLink = response.image_id;
+                imageLinks.push(imageLink);
+                uploadCount++;
+
+                if (uploadCount === uploadedViewimg.length) {
+                  const joinedImageLinks = imageLinks.join(" ");
+                  const messagew = joinedImageLinks + ' [|||__-_...-_=+~~+)(*@#$%#^^%&(&$!~~~#$%&,,<76576><hfghghfhgfg.gfh>?[{(TurboLancer)}]~))__|||] ' + value
+                  console.log(document.getElementById('messageim').value)
+                  length = document.querySelectorAll('.messt')
+
+                  appendMessage(messagew, currentTime, userId, [], length.length + 1, diff);
+
+                  socket.emit('sendMessage', { userId, chatRoomName, currentTime, message: messagew, diff: diff });
+
+                  console.log("Message with image links sent successfully.");
+                }
+              } else {
+                console.log("Error: " + xhr.status);
+              }
+            }
+          };
+
+          xhr.send(formData);
+        })
+          .catch(error => {
+            console.error('Error fetching or processing the image:', error);
+          });
+      });
+    }
+
+    document.querySelector(".searchfilter").addEventListener('input', function (event) {
+      // Declare variables
+      var input, filter, contacts, i, span, username;
+
+      input = document.querySelector(".searchfilter");
+      filter = input.value.toUpperCase();
+      contacts = document.querySelectorAll("#container_contect .contact");
+
+      let allContactsHidden = true;
+
+      for (i = 0; i < contacts.length; i++) {
+        span = contacts[i].getElementsByClassName("user-name")[0];
+        username = span.textContent || span.innerText;
+
+        // Check if the username contains the filter text
+        if (username.toUpperCase().indexOf(filter) > -1) {
+          contacts[i].style.display = "grid";
+
+          // Highlight matching letters in green and bold
+          var regex = new RegExp('(' + filter + ')', 'gi');
+          span.innerHTML = username.replace(regex, '<span style="color: #15a986;  transition: all 0.3s;">$1</span>');
+        } else {
+          contacts[i].style.display = "none";
+        }
+      }
+
+      // Check if all contacts are hidden
+      contacts.forEach(contact => {
+        if (contact.style.display !== "none") {
+          allContactsHidden = false;
+        }
+      });
+
+      let noResultsMessage = document.querySelector('#no_results_message');
+      noResultsMessage.style.display = allContactsHidden ? "block" : "none";
+    });
+    document.querySelector(".searchfilter").addEventListener('click', function (event) {
+      // Declare variables
+      var input, filter, contacts, i, span, username;
+
+      input = document.querySelector(".searchfilter");
+      filter = input.value.toUpperCase();
+      contacts = document.querySelectorAll("#container_contect .contact");
+
+      let allContactsHidden = true;
+
+      for (i = 0; i < contacts.length; i++) {
+        span = contacts[i].getElementsByClassName("user-name")[0];
+        username = span.textContent || span.innerText;
+
+        // Check if the username contains the filter text
+        if (username.toUpperCase().indexOf(filter) > -1) {
+          contacts[i].style.display = "grid";
+
+          // Highlight matching letters in green and bold
+          var regex = new RegExp('(' + filter + ')', 'gi');
+          span.innerHTML = username.replace(regex, '<span style="color: var(--primary-color);  transition: all 0.3s;">$1</span>');
+        } else {
+          contacts[i].style.display = "none";
+        }
+      }
+
+      // Check if all contacts are hidden
+      contacts.forEach(contact => {
+        if (contact.style.display !== "none") {
+          allContactsHidden = false;
+        }
+      });
+
+      let noResultsMessage = document.querySelector('#no_results_message');
+      noResultsMessage.style.display = allContactsHidden ? "block" : "none";
+    });
+
+    let currentZoom = 1;
+    let minZoom = 1;
+    let maxZoom = 5;
+    let stepSize = 0.3;
+    let container = document.getElementById('myModal');
+    let image = document.querySelector('.modal img');
+
+    image.addEventListener('wheel', function (event) {
+      // Calculate the position of the cursor relative to the container
+      let image = document.querySelector('.modal img').getBoundingClientRect();
+      let cursorX = event.clientX - image.left;
+      let cursorY = event.clientY - image.top;
+
+      // Calculate the zoom origin based on cursor position
+      let originX = (cursorX / image.width) * 100 + '%';
+      let originY = (cursorY / image.height) * 100 + '%';
+
+      // Zoom in or out based on the scroll direction and set the transform origin
+      let direction = event.deltaY > 0 ? -1 : 1;
+      zoomImage(direction, originX, originY);
+    });
+
+
+    function zoomImage(direction, originX, originY) {
+      let newZoom = currentZoom + direction * stepSize;
+
+      // Limit the zoom level to the minimum and maximum values
+      if (newZoom < minZoom || newZoom > maxZoom) {
+        return;
+      }
+
+      currentZoom = newZoom;
+
+      // Update the CSS transform of the image to scale it with the specified origin
+      image.style.transform = `scale(${currentZoom})`;
+      image.style.transformOrigin = originX + ' ' + originY;
+    }
+
+  </script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

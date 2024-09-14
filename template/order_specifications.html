@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>TurboLancer | Order specifications</title>
+    <link rel="icon" type="image/png" href="/static/icon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/static/profie_page.css" />
+    <link rel="stylesheet" href="/static/toast.css" />
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="/static/tailwind.js"></script>
+    <script src="/static/toast.js"></script>
+    <script src="jquery-3.7.1.min.js"></script>
+    <style>
+
+        .fileP {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: fit-content !important;
+            height: fit-content;
+            padding: 1px;
+            border-radius: 10px;
+            
+        }
+        .fileP i{
+            color: #54ad00;
+            height: 100%;
+            padding: 6px;
+            border-radius: 10px 0 0 10px;
+
+        }
+        .text-gray {
+            width: 90px;
+            white-space: nowrap;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+
+        .form {
+            box-shadow: 0 2px 5px #0000004b;
+            border-radius: 7px;
+            padding: 13px;
+        }
+
+        .question {
+            word-break: break-all;
+        }
+        .btn-error{
+            color: #fff !important;
+            width: 20px !important;
+            height: 20px !important;
+            position: absolute;
+            padding: 2px !important;
+            top: -10px;
+            right: -10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w-full navbar bg-base-300"  style="position: sticky; top: 0;left: 0; z-index: 1234567890;">
+        <div class="flex-1 px-2 mx-2">
+       
+            <img src="/static/dark_logo.png" alt="TurboLancer" class="logo" />
+        </div>
+        <div class="flex-none">
+            <!-- ADD DROP DOWN HERE -->
+
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" class="m-1 btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img src="{{image}}" alt="{{name}}" title="{{name}}" />
+                    </div>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+
+                    <li><a id="LogOutButton">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto my-8 p-4">
+        <h1 class="text-3xl font-bold mb-4">Please provide your specifications</h1>
+        <p class="text-gray-500">&nbsp;&nbsp;The seller requires the following data to fulfill your order.</p>
+        <p style="text-align: right; "><span title="This Answer Is Required" style="font-size: 30px; color: red; font-weight: bold;">*</span> denotes a required field.</p>        <div class="form">
+            <div class="form-control">
+                <label class="label text-xl">
+                    <span class="question">
+                        <strong>1. </strong>Please provide your requirements
+                            <span title="This Answer Is Required" style="font-size: 30px; color: red; font-weight: bold;">*</span>
+                    </span>
+                </label>
+                <div class="flex flex-row gap-2">
+                    <div class="form-control w-full">
+                        <textarea oninput="initializeTextarea()" onchange="initializeTextarea()" class="textarea textarea-bordered h-48 max-w-full" id="firstQ" name="Answer" maxlength="1500" placeholder="Type Your Answer..."></textarea>
+                        <label class="label">
+                            <span class="label-text-alt">Characters: <span class="charcount"></span></span>
+                            <span class="label-text-alt">Remaining: <span class="remaining"></span></span>
+                        </label>
+                    </div>
+                    <div style="padding: 1px; display: flex; align-items: center; flex-direction: row; justify-content: center;">
+                        <a onclick="run(this)" data-id="firstQ" class="tb_ai-button texta">
+                            <span class="first">Rephrase it!</span>
+                            <span class="second"><strong class="iconAi">✨</strong></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% if data %}
+            {% for question in data %}
+            <div class="form-control">
+                <label class="label text-xl">
+                    <span class="question">
+                        <strong>{{ loop.index0 + 2 }}. </strong>{{ question['question'] }}
+                        {% if question['required'] %}
+                            <span title="This Answer Is Required" style="font-size: 30px; color: red; font-weight: bold;">*</span>
+                        {% else %}
+                            <span class="text-gray-400"> (optional)</span>
+                        {% endif %}
+                    </span>
+                </label>
+                <div class="flex flex-row gap-2">
+                    <div class="form-control w-full">
+                        <textarea oninput="initializeTextarea()" onchange="initializeTextarea()" class="textarea textarea-bordered h-48 max-w-full" id="question{{ loop.index0 }}" name="Answer" maxlength="1000" placeholder="Type Your Answer..."></textarea>
+                        <label class="label">
+                            <span class="label-text-alt">Characters: <span class="charcount"></span></span>
+                            <span class="label-text-alt">Remaining: <span class="remaining"></span></span>
+                        </label>
+                    </div>
+                    <div style="padding: 1px; display: flex; align-items: center; flex-direction: row; justify-content: center;">
+                        <a onclick="run(this)" data-id="question{{ loop.index0 }}" class="tb_ai-button texta">
+                            <span class="first">Rephrase it!</span>
+                            <span class="second"><strong class="iconAi">✨</strong></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="form-control mt-4">
+                <label class="label">
+                    <span class="label-text">Attachments <span class="text-gray-400"> (optional)</span></span>
+                </label>
+                <input type="file" class="file-input file-input-bordered w-full max-w-xs" multiple accept="image/*,application/pdf, text/*" />
+                <div id="uploaded-files" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+            </div>
+        </div>
+        <div class="mt-8 flex justify-between">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-success bg-green-50 text-success hover:text-white hover:bg-grren-700" id="continueButton">
+                Continue to Checkout (<strong id="priceDisplay"></strong>)
+            </button>
+                </div>
+    </div>
+
+    <script>
+
+const priceValue = atob('{{price}}'); 
+const priceDisplay = document.getElementById('priceDisplay');
+priceDisplay.textContent = priceValue;
+
+
+const fileInput = document.querySelector('input[type="file"]');
+const uploadedFilesContainer = document.getElementById('uploaded-files');
+const continueButton = document.getElementById('continueButton');
+const formData = new FormData();
+const uploadedFiles = new Set(); // Set to store uploaded file names
+
+fileInput.addEventListener('change', (event) => {
+    const files = event.target.files;
+
+    // Check if the total number of files exceeds the limit
+    if (uploadedFiles.size + files.length > 5) {
+        toast('d', 'You can only upload a maximum of 5 files.');
+        return;
+    }
+
+    Array.from(files).forEach((file) => {
+        if (file.size > 5 * 1024 * 1024) {
+            toast('d', 'File size exceeds the limit of 5MB');
+            return;
+        }
+
+        // Check if the file has already been uploaded
+        if (uploadedFiles.has(file.name)) {
+            toast('d', `${file.name} has already been uploaded.`);
+            return;
+        }
+
+        const fileIcon = document.createElement('div');
+        fileIcon.classList.add('card-body', 'items-center', 'bg-green-100', 'fileP', 'relative', 'flex', 'flex-row', 'items-center');
+
+        const iconElement = document.createElement('i');
+        iconElement.classList.add('text-2xl', 'text-success');
+        if (file.type.startsWith('image/')) {
+            iconElement.classList.add('fas', 'fa-image');
+        } else if (file.type === 'application/pdf') {
+            iconElement.classList.add('fas', 'fa-file-pdf');
+        } else {
+            iconElement.classList.add('fas', 'fa-file');
+        }
+
+        const fileNameElement = document.createElement('h2');
+        fileNameElement.classList.add('text-gray', 'truncate');
+        fileNameElement.textContent = file.name;
+
+        const removeButton = document.createElement('button');
+        removeButton.classList.add('btn', 'btn-xs', 'btn-circle', 'btn-error');
+        removeButton.innerHTML = '&times;';
+        removeButton.addEventListener('click', () => {
+            fileIcon.remove();
+            formData.delete(file.name);
+            uploadedFiles.delete(file.name); // Remove file from the Set
+        });
+
+        fileIcon.appendChild(iconElement);
+        fileIcon.appendChild(fileNameElement);
+        fileIcon.appendChild(removeButton);
+        uploadedFilesContainer.appendChild(fileIcon);
+
+        formData.append(file.name, file);
+        uploadedFiles.add(file.name); // Add file to the Set
+    });
+});
+
+
+
+continueButton.addEventListener('click', () => {
+    const answers = [];
+
+    document.querySelectorAll('textarea').forEach((textarea) => {
+        answers.push(textarea.value);
+    });
+    formData.append('answers',answers);
+    formData.append('price','{{price}}')
+console.log('FormData as an object:', Object.fromEntries(formData.entries()));
+
+    // Send FormData to server or perform further actions
+    // Example: fetch('/submit', { method: 'POST', body: formData });
+});
+
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+// Function to initialize the textareas
+function initializeTextarea() {
+    const textareas = document.querySelectorAll("textarea");
+    textareas.forEach((textarea) => {
+        const maxLength = parseInt(textarea.getAttribute("maxlength"), 10);
+        const charCount = textarea.value.length;
+        const charCountElement = textarea.parentNode.querySelector(".charcount");
+        const remainingElement = textarea.parentNode.querySelector(".remaining");
+
+        charCountElement.innerHTML = `${charCount}/${maxLength}`;
+        remainingElement.innerHTML = maxLength - charCount;
+
+        checkOverLimit(textarea, maxLength, charCountElement, remainingElement );
+
+        textarea.addEventListener("input", () => {
+            checkOverLimit(textarea, maxLength, charCountElement, remainingElement, );
+        });
+    });
+}
+
+// Function to check if the textarea value exceeds the maximum length
+function checkOverLimit(textarea, maxLength, charCountElement, remainingElement) {
+    const charCount = textarea.value.length;
+    const remainingLabel = remainingElement.parentNode.querySelector(".label-text-alt:first-child");
+
+    charCountElement.innerHTML = `${charCount}/${maxLength}`;
+    const remainingChars = maxLength - charCount;
+    remainingElement.innerHTML = Math.abs(remainingChars);
+
+    if (charCount > maxLength) {
+        remainingLabel.innerHTML = "exceeded by:";
+        remainingElement.classList.add("over");
+        textarea.style.color = "hsl(0, 80%, 60%)";
+        textarea.setAttribute("data-over", "true");
+    } else if (charCount < 250) {
+        remainingElement.classList.remove("over");
+        textarea.style.color = "hsl(0, 0%, 50%)";
+        textarea.setAttribute("data-over", "false");
+    } else {
+        remainingLabel.innerHTML = "Remaining:";
+        remainingElement.classList.remove("over");
+        textarea.style.color = "hsl(0, 0%, 50%)";
+        textarea.setAttribute("data-over", "false");
+    }
+}
+
+initializeTextarea();
+    </script>
+</body>
+
+</html>

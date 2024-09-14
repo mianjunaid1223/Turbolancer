@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>TurboLancer</title>
+  <link rel="icon" type="image/png" href="/static/icon.png" />
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* CSS */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #ffffff;
+      margin: 0;
+    }
+
+    .quiz-container {
+      max-width: 500px;
+      color: #121212;
+      margin: 50px auto;
+      margin-top: 10%;
+      background-color: #ffffffd2;
+      transition: all 0.3s;
+
+      backdrop-filter: blur(10px);
+      z-index: 54;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.37);
+      opacity: 1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .circle {
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(#00a56e, #53ef7d);
+      border-radius: 50%;
+      position: absolute;
+      z-index: -5566;
+      animation: move-up6 4s linear infinite alternate-reverse;
+    }
+
+    .circle:nth-child(1) {
+      top: -25px;
+      left: -25px;
+      z-index: -657;
+
+    }
+
+    .circle:nth-child(2) {
+      bottom: -25px;
+      right: -25px;
+      animation-name: move-down1;
+      z-index: -657;
+
+    }
+
+    @keyframes move-up6 {
+      to {
+        transform: translateY(-40px);
+        z-index: -657;
+
+      }
+    }
+
+    @keyframes move-down1 {
+      to {
+        transform: translateY(40px);
+        z-index: -657;
+
+      }
+    }
+
+
+    h2 {
+      margin-top: 0;
+      color: #121212;
+    }
+
+    ul {
+      list-style: none;
+      color: #121212;
+      padding: 0;
+    }
+
+    /* Define the keyframe animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Apply the animation to the li elements */
+    li {
+      margin: 10px 0;
+      cursor: pointer;
+      padding: 10px;
+      color: #121212;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+
+    li:hover {
+      filter: brightness(130%);
+      border: 1px solid #6b6b6b;
+    }
+
+    .btn-conteiner {
+      display: flex;
+      justify-content: center;
+      --color-text: #ffffff;
+      --color-background: #00a56e;
+      --color-outline: #00a56e;
+      --color-shadow: #00000080;
+    }
+
+    .btn-content {
+      display: flex;
+      align-items: center;
+      padding: 5px 30px;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 300;
+      font-size: 30px;
+      color: var(--color-text);
+      background: var(--color-background);
+      transition: 1s;
+      text-decoration: none;
+      border-radius: 100px;
+      box-shadow: 0 0 0.2em 0 var(--color-background);
+    }
+
+    a {
+      text-decoration: none !important;
+    }
+
+    a:hover {
+      color: floralwhite;
+    }
+
+    .btn-content:hover,
+    .btn-content:focus {
+      transition: 0.5s;
+      -webkit-animation: btn-content 1s;
+      animation: btn-content 1s;
+      outline: 0.1em solid transparent;
+      outline-offset: 0.2em;
+      box-shadow: 0 0 0.4em 0 var(--color-background);
+    }
+
+    .btn-content .icon-arrow {
+      transition: 0.5s;
+      margin-right: 0px;
+      transform: scale(0.6);
+    }
+
+    .btn-content:hover .icon-arrow {
+      transition: 0.5s;
+      margin-right: 25px;
+    }
+
+    .icon-arrow {
+      width: 20px;
+      margin-left: 15px;
+      position: relative;
+      top: 6%;
+    }
+
+    /* SVG */
+    #arrow-icon-one {
+      transition: 0.4s;
+      transform: translateX(-60%);
+    }
+
+    #arrow-icon-two {
+      transition: 0.5s;
+      transform: translateX(-30%);
+    }
+
+    .btn-content:hover #arrow-icon-three {
+      animation: color_anim 1s infinite 0.2s;
+    }
+
+    .btn-content:hover #arrow-icon-one {
+      transform: translateX(0%);
+      animation: color_anim 1s infinite 0.6s;
+    }
+
+    .btn-content:hover #arrow-icon-two {
+      transform: translateX(0%);
+      animation: color_anim 1s infinite 0.4s;
+    }
+
+    /* SVG animations */
+    @keyframes color_anim {
+      0% {
+        fill: white;
+      }
+
+      50% {
+        fill: var(--color-background);
+      }
+
+      100% {
+        fill: white;
+      }
+    }
+
+    /* Button animations */
+    @-webkit-keyframes btn-content {
+      0% {
+        outline: 0.2em solid var(--color-background);
+        outline-offset: 0;
+      }
+    }
+
+    @keyframes btn-content {
+      0% {
+        outline: 0.2em solid var(--color-background);
+        outline-offset: 0;
+      }
+    }
+
+    #next-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .quiz-container ul li.selected {
+      transition: all 0.4s;
+      box-shadow: 0 2px 8px #00a56e;
+    }
+
+    #result {
+      margin: 70px auto;
+      width: 50%;
+      padding: 10px;
+      box-shadow: 0 3px 10px #1212129a;
+      transition: all 0.3s;
+      padding: auto;
+      border-radius: 10px;
+      animation-name: sh;
+    }
+
+    .fade {
+      backdrop-filter: blur(30px);
+    }
+
+
+    #img {
+      width: 130px;
+      margin: 10px;
+    }
+
+    #z {
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(10px);
+      padding: 20px;
+
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.37);
+    }
+
+    /* Styles for the result container */
+    #result {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
+
+    }
+
+    /* Styles for the h3 element */
+    #result h3 {
+      font-size: 24px;
+      margin-top: 0;
+    }
+
+    /* Styles for the image */
+    #img {
+      display: block;
+      margin: 20px auto;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Styles for the p elements */
+    #result p {
+      margin: 5px 0;
+    }
+
+    /* Styles for the h5 element */
+    #result h5 {
+      font-size: 16px;
+      font-style: italic;
+    }
+
+    /* Media Query for Responsiveness */
+    @media screen and (max-width: 480px) {
+      #result {
+        max-width: 90%;
+      }
+    }
+
+    .question {
+      animation: fadeIn 0.5s ease-in-out;
+
+    }
+
+    /* styles.css */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .container1 {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.274);
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: 49% 49%;
+      gap: 2%;
+      justify-content: space-evenly;
+    }
+
+    .result-card {
+      background-color: #eefaf5;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .card {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.274);
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      color: #00a56e;
+      /* Updated icon color */
+    }
+
+    .topic {
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.274);
+      border-radius: 10px;
+      color: #121221;
+      background-color: #ffffff;
+      /* Updated background color */
+    }
+
+    .topic-icon {
+      background-color: #00a56e;
+      /* Updated topic icon background color */
+      color: #ffffff;
+      font-size: 30px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    /* Customize Bootstrap card styles */
+    .card-header {
+      background-color: #00a56e;
+      /* Updated header background color */
+      color: #ffffff;
+      border-bottom: none;
+      /* Remove bottom border on the header */
+      border-radius: 10px 10px 0 0;
+      /* Rounded top corners for the header */
+    }
+
+    .card-header h2 {
+      margin-bottom: 0;
+    }
+
+    /* For small devices, stack the topic cards vertically */
+    @media (max-width: 767.98px) {
+      .topic {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- HTML -->
+  <div class="quiz-container">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div id="z">
+      <h2 id="question-number"></h2>
+      <p id="question">Loading...</p>
+      <ul id="choices"></ul>
+    </div>
+  </div>
+  <div id="timer-container">
+    <span id="timer">60</span> seconds left
+  </div>
+  <div class="btn-conteiner " id="next-btn" disabled>
+    <a class="btn-content" href="#">
+      <span class="btn-title">Skip</span>
+      <span class="icon-arrow">
+        <svg width="66px" height="43px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <path id="arrow-icon-one"
+              d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
+              fill="#FFFFFF"></path>
+            <path id="arrow-icon-two"
+              d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
+              fill="#FFFFFF"></path>
+            <path id="arrow-icon-three"
+              d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
+              fill="#FFFFFF"></path>
+          </g>
+        </svg>
+      </span>
+    </a>
+  </div>
+  <div class="container mt-5">
+    <!-- Add the result card below this line -->
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
+  <script>
+    let functionEnabled = true;
+    let sf = false;
+
+    var elem = document.documentElement;
+    var chances = 3;
+    function back() {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+      }
+    } function openFullscreen() {
+      if (functionEnabled) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+          elem.msRequestFullscreen();
+        }
+
+        window.onblur = function () {
+          if (functionEnabled && chances > 0) {
+            window.focus();
+            $('#chancesModal').modal('show');
+            chances = chances - 1;
+
+            if (chances === 0) {
+              ch = 'No more';
+            } else if (chances === 1) {
+              ch = 'One';
+            } else if (chances === 2) {
+              ch = 'Two';
+            } else if (chances === 3) {
+              ch = 'Three';
+            }
+
+            document.getElementById('chancesRemaining').innerText = ch;
+          } else {
+            // Show final notification modal
+            $('#finalModal').modal('show');
+          }
+        };
+      }
+    }
+
+
+    // Disable some common shortcut keys
+    document.onkeydown = function (e) {
+      if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || e.key === "F5" || e.key === "F11" || e.key === "F11") {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    // Disable context menu
+    document.oncontextmenu = function (e) {
+      e.preventDefault();
+    };
+
+    // Show animated modal box on page load
+    $(document).ready(function () {
+      $('#myModal').modal('show');
+    });
+
+    // Handle continue button click to close the modal
+    function closeModal() {
+      $('#myModal').modal('hide');
+    }
+
+    // Trigger full screen on button click
+  </script>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <img src="https://cdn-icons-png.flaticon.com/128/8905/8905538.png" alt="Important Test Instructions"
+            style="max-width: 150px;">
+
+          <h4 style="color: red; font-weight: bold;">Important Test Instructions:</h4>
+          <p>It is crucial to remain within the test window at all times. Leaving or venturing outside of the window
+            will be considered a violation and will be included in the cheating case. Remember to answer each Multiple
+            Choice Question (MCQ) within the allocated time. We wish you the best of luck for your test.</p>
+          <button type="button" class="btn btn-primary" id="continueBtn"
+            onclick="closeModal(); openFullscreen();">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remaining Chances Modal -->
+  <div class="modal fade" id="chancesModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <!-- Add the image below -->
+          <img src="https://cdn-icons-png.flaticon.com/128/10263/10263927.png" alt="Venture outside the window"
+            style="max-width: 150px;">
+
+          <h4>Do not leave the window<span style="color: red; font-weight: bolder;">!</span></h4>
+          <p>You venture outside the window, becoming implicated in the cheating case, and now you are left with <span
+              style="color: red; font-weight: bolder;" id="chancesRemaining"></span> remaining opportunity to resolve
+            the situation.</p>
+          <button type="button" class="btn btn-primary" onclick="$('#chancesModal').modal('hide'); back() ">I
+            understand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Final Notification Modal -->
+  <div class="modal fade" id="finalModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <!-- Add the image below -->
+          <img src="https://cdn-icons-png.flaticon.com/128/9247/9247838.png" alt="Chances Exhausted"
+            style="max-width: 100px;">
+
+          <h4>Chances Exhausted: Test <b style="color: red;"> Canceled</b>!</h4>
+          <p>Regrettably, since you have utilized all allotted opportunities, your test has been <b style="color: red;">
+              Canceled</b> owing to the involvement in the cheating incident.</p>
+          <button type="button" class="btn btn-primary" onclick="window.close();">Close Test</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const questionNumberElement = document.getElementById('question-number');
+      const questionElement = document.getElementById('question');
+      const choicesElement = document.getElementById('choices');
+      const nextButton = document.getElementById('next-btn');
+      const timerElement = document.getElementById('timer');
+      const resultElement = document.getElementById('result');
+
+      let currentQuestionIndex = 0;
+      let quizData = [];
+      let timeLeft = 60;
+      let timerInterval;
+
+      // Inside new_window.html
+      var urlParams = new URLSearchParams(window.location.search);
+      var transferredVariable = urlParams.get('data');
+
+      console.log(transferredVariable); // Output: "Hello, this is my variable!"
+
+      // Function to fetch quiz data from the API
+      function fetchQuizData() {
+        fetch(`/api/quiz/${transferredVariable}`, {
+          method: 'GET',
+        })
+          .then(response => response.json())
+          .then(data => {
+            quizData = data;
+            displayQuestion();
+          })
+          .catch(error => console.error('Error fetching quiz data:', error));
+      }
+
+      // Function to display the current question with a fade-in animation
+      function displayQuestion() {
+        const currentQuestion = quizData[currentQuestionIndex];
+        questionNumberElement.textContent = `Question ${currentQuestionIndex + 1} out of ${quizData.length}`;
+        questionElement.textContent = currentQuestion.question;
+        document.querySelector('.btn-title').innerText = 'Skip'
+
+        // Clear previous choices and apply fade-in animation
+        choicesElement.style.opacity = 0;
+        setTimeout(() => {
+          // Create list items for choices
+          choicesElement.innerHTML = '';
+          currentQuestion.options.forEach((choice, index) => {
+            const li = document.createElement('li');
+            li.textContent = choice;
+            li.addEventListener('click', () => selectChoice(index));
+            choicesElement.appendChild(li);
+          });
+          choicesElement.style.opacity = 1;
+        }, 300); // 300ms for the fade-in animation
+
+        // Enable or disable the "Next" button based on the current question index
+        if (currentQuestionIndex < quizData.length - 1) {
+          nextButton.disabled = true;
+        } else {
+          nextButton.disabled = false;
+        }
+
+        // Reset timer
+        timeLeft = 60;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      // Function to handle the selection of a choice
+      // JavaScript
+      function selectChoice(choiceIndex) {
+        const currentQuestion = quizData[currentQuestionIndex];
+        currentQuestion.selectedChoice = choiceIndex;
+        nextButton.disabled = false;
+        document.querySelector('.btn-title').innerText = 'Next'
+
+        // Remove the 'selected' class from all choices
+        const choices = choicesElement.getElementsByTagName('li');
+        for (let i = 0; i < choices.length; i++) {
+          choices[i].classList.remove('selected');
+
+        }
+
+        // Add the 'selected' class to the clicked choice
+        choices[choiceIndex].classList.add('selected');
+      }
+
+      // Function to move to the next question
+      function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= quizData.length) {
+          clearInterval(timerInterval);
+          showResult();
+          return;
+        }
+        displayQuestion();
+      }
+
+      // Function to update the timer and check for time-out
+      function updateTimer() {
+        timeLeft--;
+        timerElement.textContent = timeLeft + ' seconds left';
+        if (timeLeft === 0) {
+          clearInterval(timerInterval);
+          nextQuestion();
+        }
+      }
+      function exit() {
+        if (sf) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            /* Safari */
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) {
+            /* IE11 */
+            document.msExitFullscreen();
+          }
+        }
+      }
+      function showResult() {
+  functionEnabled = false;
+  sf = true;
+  exit();
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.remove();
+  });
+
+  // Hide elements with the class name 'quiz-container'
+  const quizContainers = document.getElementsByClassName('quiz-container');
+  for (let i = 0; i < quizContainers.length; i++) {
+    quizContainers[i].style.display = 'none';
+  }
+
+  // Hide the element with the ID 'timer-container'
+  document.getElementById('timer-container').style.display = 'none';
+
+  // Hide the element with the ID 'next-btn'
+  document.getElementById('next-btn').style.display = 'none';
+
+  const topicData = {};
+  let totalQuestions = 0;
+  let correctAnswers = 0;
+
+  quizData.forEach(question => {
+    totalQuestions++;
+    const isCorrect = question.selectedChoice === question.correctIndex;
+
+    if (isCorrect) {
+      correctAnswers++;
+    }
+
+    const topic = question.topic;
+    if (!topicData[topic]) {
+      topicData[topic] = {
+        total: 0,
+        correct: 0,
+      };
+    }
+
+    topicData[topic].total++;
+    if (isCorrect) {
+      topicData[topic].correct++;
+    }
+  });
+
+  let overallResult = '';
+  let overallBgColor = '';
+  let overallButtonLabel = '';
+
+  const overallPercentage = (correctAnswers / totalQuestions) * 100;
+  if (overallPercentage >= 60) {
+    overallResult = 'Passed';
+    overallBgColor = '#00a56e';
+    overallButtonLabel = 'Start Service';
+  } else {
+    overallResult = 'Failed';
+    overallBgColor = 'rgba(255, 0, 0, 0.7)';
+    overallButtonLabel = 'Go Back';
+  }
+
+  let resultHTML = '<div class="container1">'; // Create a container for the overall result card and individual topic-wise result cards
+  resultHTML += '<div class="result-card">'; // Start overall result card
+
+  resultHTML += '<h3>Overall Result</h3>';
+  resultHTML += `<p>Total Questions: ${totalQuestions}</p>`;
+  resultHTML += `<p>Correct Answers: ${correctAnswers}</p>`;
+
+  resultHTML += `<p>Percentage: ${overallPercentage.toFixed(2)}%</p>`;
+  resultHTML += `<p>Result: ${overallResult}</p>`;
+
+  resultHTML += '</div>'; // End overall result card
+
+  // Display result for each topic and log it to the console
+  for (const topic in topicData) {
+    const topicInfo = topicData[topic];
+    const topicPercentage = (topicInfo.correct / topicInfo.total) * 100;
+    const topicResult = topicPercentage >= 60 ? 'Passed' : 'Failed';
+    const topicBgColor = topicPercentage >= 60 ? '#00a56e' : 'rgba(255, 0, 0, 0.7)';
+
+    resultHTML += '<div class="topic">'; // Start individual topic-wise result card
+
+    resultHTML += `<div class="topic-icon" style="background-color: ${topicBgColor};">`;
+    resultHTML += `<i class="fas fa-book"></i>`;
+    resultHTML += '</div>';
+
+    resultHTML += `<h4>Topic: ${topic}</h4>`;
+    resultHTML += `<p>Total Questions: ${topicInfo.total}</p>`;
+    resultHTML += `<p>Correct Answers: ${topicInfo.correct}</p>`;
+    resultHTML += `<p>Percentage: ${topicPercentage.toFixed(2)}%</p>`;
+    resultHTML += `<p>Result: ${topicResult}</p>`;
+
+    resultHTML += '</div>'; // End individual topic-wise result card
+
+    // Log individual topic result to the console
+    console.log(`Topic: ${topic}`);
+    console.log(`Total Questions: ${topicInfo.total}`);
+    console.log(`Correct Answers: ${topicInfo.correct}`);
+    console.log(`Percentage: ${topicPercentage.toFixed(2)}%`);
+    console.log(`Result: ${topicResult}`);
+  }
+
+  resultHTML += '</div>'; // End container for overall and individual result cards
+
+  const container = document.querySelector('.container');
+  container.innerHTML = resultHTML;
+
+  // Add a button after the cards
+  const button = document.createElement('button');
+  button.textContent = overallButtonLabel;
+  button.classList.add('btn');
+  button.style.backgroundColor = overallBgColor;
+  button.style.color = '#fff';
+  button.style.marginTop = '20px';
+  container.appendChild(button);
+
+  // Add an event listener to the button based on overall result
+  button.addEventListener('click', () => {
+    if (overallPercentage >= 60) {
+      // Perform action when passed
+      console.log('Start service');
+    } else {
+      // Perform action when failed
+      console.log('Go back');
+    }
+  });
+}
+function showResult() {
+  functionEnabled = false;
+  sf = true;
+  exit();
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.remove();
+  });
+
+  // Hide elements with the class name 'quiz-container'
+  const quizContainers = document.getElementsByClassName('quiz-container');
+  for (let i = 0; i < quizContainers.length; i++) {
+    quizContainers[i].style.display = 'none';
+  }
+
+  // Hide the element with the ID 'timer-container'
+  document.getElementById('timer-container').style.display = 'none';
+
+  // Hide the element with the ID 'next-btn'
+  document.getElementById('next-btn').style.display = 'none';
+
+  const topicData = {};
+  let totalQuestions = 0;
+  let correctAnswers = 0;
+
+  quizData.forEach(question => {
+    totalQuestions++;
+    const isCorrect = question.selectedChoice === question.correctIndex;
+
+    if (isCorrect) {
+      correctAnswers++;
+    }
+
+    const topic = question.topic;
+    if (!topicData[topic]) {
+      topicData[topic] = {
+        total: 0,
+        correct: 0,
+      };
+    }
+
+    topicData[topic].total++;
+    if (isCorrect) {
+      topicData[topic].correct++;
+    }
+  });
+
+  let overallResult = '';
+  let overallBgColor = '';
+  let overallButtonLabel = '';
+
+  const overallPercentage = (correctAnswers / totalQuestions) * 100;
+  if (overallPercentage >= 60) {
+    overallResult = 'Passed';
+    overallBgColor = '#00a56e';
+    overallButtonLabel = 'Start Service';
+  } else {
+    overallResult = 'Failed';
+    overallBgColor = 'rgba(255, 0, 0, 0.7)';
+    overallButtonLabel = 'Go Back';
+  }
+
+  let resultHTML = '<div class="container1">'; // Create a container for the overall result card and individual topic-wise result cards
+  resultHTML += '<div class="result-card">'; // Start overall result card
+
+  resultHTML += '<h3>Overall Result</h3>';
+  resultHTML += `<p>Total Questions: ${totalQuestions}</p>`;
+  resultHTML += `<p>Correct Answers: ${correctAnswers}</p>`;
+
+  resultHTML += `<p>Percentage: ${overallPercentage.toFixed(2)}%</p>`;
+  resultHTML += `<p>Result: ${overallResult}</p>`;
+
+  resultHTML += '</div>'; // End overall result card
+
+  // Display result for each topic and log it to the console
+  for (const topic in topicData) {
+    const topicInfo = topicData[topic];
+    const topicPercentage = (topicInfo.correct / topicInfo.total) * 100;
+    const topicResult = topicPercentage >= 60 ? 'Passed' : 'Failed';
+    const topicBgColor = topicPercentage >= 60 ? '#00a56e' : 'rgba(255, 0, 0, 0.7)';
+
+    resultHTML += '<div class="topic">'; // Start individual topic-wise result card
+
+    resultHTML += `<div class="topic-icon" style="background-color: ${topicBgColor};">`;
+    resultHTML += `<i class="fas fa-book"></i>`;
+    resultHTML += '</div>';
+
+    resultHTML += `<h4>Topic: ${topic}</h4>`;
+    resultHTML += `<p>Total Questions: ${topicInfo.total}</p>`;
+    resultHTML += `<p>Correct Answers: ${topicInfo.correct}</p>`;
+    resultHTML += `<p>Percentage: ${topicPercentage.toFixed(2)}%</p>`;
+    resultHTML += `<p>Result: ${topicResult}</p>`;
+
+    resultHTML += '</div>'; // End individual topic-wise result card
+
+    // Log individual topic result to the console
+    console.log(`Topic: ${topic}`);
+    console.log(`Total Questions: ${topicInfo.total}`);
+    console.log(`Correct Answers: ${topicInfo.correct}`);
+    console.log(`Percentage: ${topicPercentage.toFixed(2)}%`);
+    console.log(`Result: ${topicResult}`);
+  }
+
+  resultHTML += '</div>'; // End container for overall and individual result cards
+
+  const container = document.querySelector('.container');
+  container.innerHTML = resultHTML;
+
+  // Add a button after the cards
+  const button = document.createElement('button');
+  button.textContent = overallButtonLabel;
+  button.classList.add('btn');
+  button.style.backgroundColor = overallBgColor;
+  button.style.color = '#fff';
+  button.style.marginTop = '20px';
+  container.appendChild(button);
+
+  // Add an event listener to the button based on overall result
+  button.addEventListener('click', () => {
+    if (overallPercentage >= 60) {
+      // Perform action when passed
+      console.log('Start service');
+    } else {
+      // Perform action when failed
+      console.log('Go back');
+    }
+  });
+}
+function showResult() {
+  functionEnabled = false;
+  sf = true;
+  exit();
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.remove();
+  });
+
+  // Hide elements with the class name 'quiz-container'
+  const quizContainers = document.getElementsByClassName('quiz-container');
+  for (let i = 0; i < quizContainers.length; i++) {
+    quizContainers[i].style.display = 'none';
+  }
+
+  // Hide the element with the ID 'timer-container'
+  document.getElementById('timer-container').style.display = 'none';
+
+  // Hide the element with the ID 'next-btn'
+  document.getElementById('next-btn').style.display = 'none';
+
+  const topicData = {};
+  let totalQuestions = 0;
+  let correctAnswers = 0;
+
+  quizData.forEach(question => {
+    totalQuestions++;
+    const isCorrect = question.selectedChoice === question.correctIndex;
+
+    if (isCorrect) {
+      correctAnswers++;
+    }
+
+    const topic = question.topic;
+    if (!topicData[topic]) {
+      topicData[topic] = {
+        total: 0,
+        correct: 0,
+      };
+    }
+
+    topicData[topic].total++;
+    if (isCorrect) {
+      topicData[topic].correct++;
+    }
+  });
+
+  let overallResult = '';
+  let overallBgColor = '';
+  let overallButtonLabel = '';
+
+  const overallPercentage = (correctAnswers / totalQuestions) * 100;
+  if (overallPercentage >= 60) {
+    overallResult = 'Passed';
+    overallBgColor = '#00a56e';
+    overallButtonLabel = 'Start Service';
+  } else {
+    overallResult = 'Failed';
+    overallBgColor = 'rgba(255, 0, 0, 0.7)';
+    overallButtonLabel = 'Go Back';
+  }
+
+  let resultHTML = '<div class="container1">'; // Create a container for the overall result card and individual topic-wise result cards
+  resultHTML += '<div class="result-card">'; // Start overall result card
+
+  resultHTML += '<h3>Overall Result</h3>';
+  resultHTML += `<p>Total Questions: ${totalQuestions}</p>`;
+  resultHTML += `<p>Correct Answers: ${correctAnswers}</p>`;
+
+  resultHTML += `<p>Percentage: ${overallPercentage.toFixed(2)}%</p>`;
+  resultHTML += `<p>Result: ${overallResult}</p>`;
+
+  resultHTML += '</div>'; // End overall result card
+
+  // Display result for each topic and log it to the console
+  for (const topic in topicData) {
+    const topicInfo = topicData[topic];
+    const topicPercentage = (topicInfo.correct / topicInfo.total) * 100;
+    const topicResult = topicPercentage >= 60 ? 'Passed' : 'Failed';
+    const topicBgColor = topicPercentage >= 60 ? '#00a56e' : 'rgba(255, 0, 0, 0.7)';
+
+    resultHTML += '<div class="topic">'; // Start individual topic-wise result card
+
+    resultHTML += `<div class="topic-icon" style="background-color: ${topicBgColor};">`;
+    resultHTML += `<i class="fas fa-book"></i>`;
+    resultHTML += '</div>';
+
+    resultHTML += `<h4>Topic: ${topic}</h4>`;
+    resultHTML += `<p>Total Questions: ${topicInfo.total}</p>`;
+    resultHTML += `<p>Correct Answers: ${topicInfo.correct}</p>`;
+    resultHTML += `<p>Percentage: ${topicPercentage.toFixed(2)}%</p>`;
+    resultHTML += `<p>Result: ${topicResult}</p>`;
+
+    resultHTML += '</div>'; // End individual topic-wise result card
+
+    // Log individual topic result to the console
+    console.log(`Topic: ${topic}`);
+    console.log(`Total Questions: ${topicInfo.total}`);
+    console.log(`Correct Answers: ${topicInfo.correct}`);
+    console.log(`Percentage: ${topicPercentage.toFixed(2)}%`);
+    console.log(`Result: ${topicResult}`);
+  }
+
+  resultHTML += '</div>'; // End container for overall and individual result cards
+
+  const container = document.querySelector('.container');
+  container.innerHTML = resultHTML;
+
+  // Add a button after the cards
+  const button = document.createElement('button');
+  button.textContent = overallButtonLabel;
+  button.classList.add('btn');
+  button.style.backgroundColor = overallBgColor;
+  button.style.color = '#fff';
+  button.style.marginTop = '20px';
+  container.appendChild(button);
+
+  // Add an event listener to the button based on overall result
+  button.addEventListener('click', () => {
+    if (overallPercentage >= 60) {
+     window.location('/Dashbord')
+    } else {
+      // Perform action when failed
+      console.log('Go back');
+    }
+  });
+}
+
+
+
+      // Event listener for the "Next" button
+      nextButton.addEventListener('click', nextQuestion);
+
+      // Fetch quiz data when the page is loaded
+      fetchQuizData();
+    });
+
+
+  </script>
+</body>
+
+</html>

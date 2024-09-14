@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.8" />
+  <title>TurboLancer | Catalogues</title>
+  <link rel="icon" type="image/png" href="/static/icon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/static/profie_page.css" />
+  <link rel="stylesheet" href="/static/toast.css" />
+  <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="/static/tailwind.js"></script>
+  <script src="/static/toast.js"></script>
+  <script src="jquery-3.7.1.min.js"></script>
+
+  <style>
+
+    .back {
+      background-color: #c31f1f !important;
+      color: #fff !important;
+    }
+
+    .slideshow::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 6px;
+    }
+
+    /* Scrollbar track */
+    .slideshow::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .slideshow::-webkit-scrollbar-corner {
+      background-color: transparent;
+    }
+
+    .slideshow::-webkit-scrollbar {
+      width: 0px;
+    }
+
+    * {
+      transition: all 0.4s !important;
+      scroll-behavior: smooth !important;
+      text-wrap: balance;
+    }
+
+    body {
+      background-color: #ffffff;
+      border-radius: 13px;
+      overflow-x: hidden;
+    }
+
+    .after {
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      background-color: #fff;
+      box-shadow: 0 5px 10px #0002;
+      position: absolute;
+      color: #000;
+      top: 18%;
+      right: 1%;
+      font-weight: bold;
+      font-size: 26px;
+      display: none;
+      user-select: none;
+
+      justify-content: center;
+      z-index: 454;
+      align-items: center;
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.4s;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: pointer;
+    }
+
+    .after.show {
+      transform: translateX(0%);
+      opacity: 1;
+      transition: all 0.4s;
+    }
+
+    .before.show {
+      transform: translateX(0%);
+      opacity: 1;
+      transition: all 0.4s;
+    }
+
+    .before {
+      transition: all 0.4s;
+      user-select: none;
+      display: none;
+      transform: translateX(-100%);
+      opacity: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      background-color: #fff;
+      box-shadow: 0 5px 10px #0002;
+      position: absolute;
+      z-index: 454;
+      color: #000;
+      top: 18%;
+      left: 1%;
+      font-weight: bold;
+      font-size: 26px;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: pointer;
+    }
+
+    .slideshow {
+      overflow-y: hidden;
+      overflow-x: auto;
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      white-space: nowrap;
+      scroll-snap-type: x mandatory !important;
+    }
+
+    .slideshow img {
+      border-radius: 17px 17px 0 0;
+      min-width: 100%;
+      min-height: 200px;
+      max-height: 200px;
+      scroll-snap-align: start !important;
+      object-fit: cover;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      border-radius: 50px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 50px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #bababa;
+      border-radius: 50px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #bdbdbd;
+    }
+
+    .gridparent {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly !important;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 100%;
+    }
+
+    .gridparent .card {
+      margin: 10px;
+      margin-top: 20px;
+    }
+
+    .heart {
+      background-color: transparent;
+      font-size: 20px;
+    }
+
+    .heart .fa-regular,
+    .heart.liked .fa-solid {
+      display: block;
+    }
+
+    .heart .fa-solid,
+    .heart.liked .fa-regular {
+      display: none;
+    }
+
+    .heart:hover {
+      filter: brightness(120%);
+    }
+
+    .disc,
+    .ti {
+      white-space: nowrap;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 240px;
+    }
+
+    main {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      padding: 25px;
+    }
+
+    .pro {
+      position: sticky;
+      padding-top: 20px;
+      right: 3%;
+      top: 0%;
+      align-self: flex-start;
+    }
+
+    @media (max-width: 1100px) {
+      main {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+
+        padding: 7px;
+      }
+    }
+
+    #tag {
+      cursor: pointer;
+      background-color: #5b5b5b;
+      color: #fff;
+    }
+
+    #tag:hover {
+      color: #fff;
+      background-color: #c31f1f;
+    }
+
+    #clear {
+      background-color: #ff000040;
+      color: red;
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    #bholder {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .add {
+      background-color: #f1f1f1;
+      font-size: 30px;
+      font-weight: 100;
+    }
+
+    #image-preview div {
+      width: 273.66px !important;
+      cursor: pointer;
+    }
+
+    #image-preview div:active {
+      cursor: move;
+    }
+
+    .newrow {
+      opacity: 0;
+      transform: scaleY(0);
+      height: 0px;
+
+      animation: add 0.4s ease forwards;
+    }
+
+    @keyframes add {
+      0% {
+        opacity: 0;
+        transform: scaleY(0);
+        height: 0px;
+      }
+
+      100% {
+        opacity: 1;
+        transform: scaleY(1);
+        height: 82px;
+      }
+    }
+
+    .newrow {
+      opacity: 0;
+      transform: scaleY(0);
+      height: auto;
+      margin-top: 0px;
+
+      animation: add 0.4s ease forwards;
+    }
+
+    @keyframes add {
+      0% {
+        opacity: 0;
+        transform: scaleY(0);
+        height: 0px;
+      }
+
+      100% {
+        opacity: 1;
+        transform: scaleY(1);
+        height: 82px;
+        margin-top: 10px;
+      }
+    }
+
+    .newrow.end {
+      opacity: 1;
+      transform: scaleY(1);
+      height: auto;
+      animation: end 0.4s ease forwards;
+      margin-top: 10px;
+    }
+
+    @keyframes end {
+      0% {
+        opacity: 1;
+        transform: scaleY(1);
+        height: 82px;
+        margin-top: 10px;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scaleY(0);
+        height: 0px;
+        margin-top: 0px;
+      }
+    }
+
+    .imga {
+      position: relative;
+      transition: all 0s;
+    }
+
+    .imga.end {
+      animation: endimg 0.4s ease forwards;
+      position: relative;
+    }
+
+    .imga #closeit {
+      background: red;
+      position: absolute;
+      color: #fff;
+      padding: 4px;
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 1px 14px 0 50px;
+      text-align: center;
+      opacity: 0;
+      top: 0px;
+      right: 0px;
+    }
+
+    .imga:hover #closeit {
+      opacity: 1;
+    }
+
+    @keyframes endimg {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+        height: 160px;
+        width: 273.66px;
+        margin-top: 10px;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0);
+        height: 0px !important;
+        width: 0 !important;
+
+        margin-top: 0px;
+      }
+    }
+
+    .newcataloge {
+      width: 320px;
+      height: 384px;
+      border-radius: 20px;
+      font-weight: 100;
+      font-size: 50px !important;
+    }
+
+    .btn-ghost {
+      background-color: #f4f4f4;
+    }
+
+    main {
+      position: absolute;
+background-color: #ffffff;
+      top: 0;
+      left: 0;
+      z-index: 11;
+      display: none;
+    }
+
+    main.show {
+      animation: hidemodle 0.4s ease forwards;
+    }
+
+    @keyframes hidemodle {
+      0% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    main {
+      animation: showmodle 0.4s ease forwards;
+    }
+
+    @keyframes showmodle {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .newrow label {
+      width: fit-content;
+      max-width: 200px;
+      min-width: 100px;
+      margin: 0 !important;
+    }
+
+    .tableHead {
+      overflow-x: auto;
+    }
+
+    #questionContainer {
+           overflow-y: auto;
+           overflow-x: hidden;
+           max-height: 60vh;
+       }
+
+       .form-group {
+           display: flex;
+           align-items: center;
+           margin-bottom: 1rem;
+           border-radius: 8px;
+           padding: 0.5rem;
+           height: 58px;
+           background-color: #f5f5f5;
+           position: relative;
+           animation: up 0.4s ease ;
+       }
+       @keyframes up {
+        0%{
+            height: 0;
+            transform: scaleY(0);
+        }
+        100%{
+            height: 58px;
+            transform: scaleY(1);
+        }
+       }
+
+       .form-group input[type="text"] {
+           flex: 1;
+           padding: 0.5rem;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+           font-size: 1rem;
+       }
+
+       .form-group .checkbox-container {
+           margin-left: 1rem;
+           display: flex;
+           align-items: center;
+       }
+
+       .form-group .checkbox-container label {
+           margin-left: 0.5rem;
+           font-size: 0.9rem;
+       }
+
+       .remove-question {
+           position: absolute;
+           display: flex;
+           flex-direction: row;
+           justify-content: center;
+           align-items: center;
+           top: -1px;
+           right: -1px;
+           background-color: red;
+           color: #ffffff;
+           font-size: 17px;
+           padding: 3px;
+           width: 20px;
+           height: 20px;
+           border-radius: 50px;
+           cursor: pointer;
+           opacity: 0;
+           transform: scale(0);
+       }
+
+       .form-group:hover .remove-question {
+           opacity: 1;
+           transform: scale(1);
+       }
+
+       #addQuestionBtn {
+           width: 100%;
+       }
+
+       .form-container {
+           max-width: 600px;
+           margin: 0 auto;
+           height: 90vh;
+           display: flex;
+           flex-direction: column;
+       }
+
+       .button:hover {
+           color: #ffff !important;
+       }
+       .removing{
+        height: 0;
+        transition: all 0.4s;
+        transform: scaleY(0);
+       }
+
+       .ask{
+        backdrop-filter: blur(50px);
+        position: fixed;
+        right: -100%;
+        flex-direction: row;
+        top: 0;
+        z-index: 100000000000000;
+        background-color: #ffffff;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        display: none;
+        animation: slideleft 0.4s ease forwards;
+       }
+       @keyframes slideleft {
+        0%{
+          opacity: 0;
+          right: -100%;
+          filter: blur(5px);
+        }
+        100%{
+          opacity: 1;
+          right: 0;
+          filter: blur(0px);
+        }
+       }
+   
+  </style>
+</head>
+
+<body>
+  <section style="padding: 15px">
+    <h1 class="text-3xl font-bold mb-4">Your Catalogues</h1>
+
+    <div class="flex gridparent">
+      {% for item in cat %}
+      <div class="card bg-base-100 shadow-xl w-80 reqimg" id="CARD{{ loop.index0 }}" data-p="{{item['_id']}}"
+        onmouseleave="hide(this)" onmouseenter="show(this)" data-c="320">
+        <div class="after" onclick="next(this)">↪</div>
+        <div class="before" onclick="back(this)">↩</div>
+        <figure class="relative">
+          <div class="slideshow">
+            {% for img in item['images'] %}
+            <img src="{{img}}" data-num="{{ loop.index0 }}" alt="Product Image"
+              class="rounded-t-box w-full h-48 object-cover" />
+            {% endfor %}
+          </div>
+          {% if item['draft'] %}
+          <button class="button btn btn-success btn-circle absolute w-auto p-2 top-2 bg-green-100 right-12" style=" color: #009d1a"
+          onclick="document.querySelector('.ask').style.display = 'flex'; catalogue_id = '{{c_id[loop.index0]}}'" >
+          Edit Draft&nbsp;<i class="fa-regular fa-pen-to-square" style="background-color: transparent; "></i>
+        </button>
+        {% endif %}
+          <button class="btn btn-circle btn-ghost absolute top-2 right-2 heart" style="background-color: #404040"
+            onclick="modal('d','Are you sure you want to delete this catalogue?','Yes, I\'m sure','dellit', 'CARD{{ loop.index0 }}'),dellit()">
+            <i class="fa-regular fa-trash-can" style="background-color: transparent; color: #ff0000"></i>
+          </button>
+        </figure>
+        <div onclick="place('{{c_id[loop.index0]}}')" class="card-body" style="border-radius: 14px; cursor: pointer">
+          <h4 class="card-title" title="{{item['title']}}">
+            <span class="ti" style="font-size: 17px">{{item['title']}}</span>
+            {% if item['res'] %}
+            <sup class="badge badge-secondary">NEW</sup>
+            {% endif %}
+          </h4>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="avatar online">
+                <div class="w-8 rounded-full">
+                  <img src="{{item['seller_image']}}" />
+                </div>
+              </div>
+              <span class="ml-2 text-sm font-semibold ti">{{item['seller_name']}}</span>
+            </div>
+          </div>
+          <div class="card-actions justify-between mt-4">
+            <div class="badge badge-lg">{{item['orders']}} orders</div>
+            <div class="text-base-content font-semibold">
+              <span class="text-gray-500">Starting at:</span>
+              <span class="text-lg ti" style="width: 70px">${{item['inputValues'][0]}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- repeat it for more card -->
+      <button onclick="openform()" class="btn btn-ghost newcataloge">
+        +
+      </button>
+    </div>
+  </section>
+  <main style="display: none">
+    <div class="first container mx-auto px-4 mt-8">
+      <h1 class="text-3xl font-bold mb-4">Create New Catalogue</h1>
+      <form class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-1/2 px-2 mb-4">
+          <div class="form-control">
+            <label class="label" for="title">Title</label>
+            <input required oninput="proview()" type="text" id="title" name="title" class="input input-bordered"
+              placeholder="Enter your Catalogue title" />
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 px-2 mb-4">
+          <div class="form-control">
+            <label class="label" for="category">Category</label>
+            <input required list="category_Items" placeholder="Enter Category Of Catalogue" id="category"
+              name="category" class="input input-bordered" />
+            <datalist id="category_Items"></datalist>
+          </div>
+        </div>
+
+        <div class="container mx-auto">
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text">Description</span>
+            </label>
+            <textarea oninput="initializeTextarea()" class="textarea textarea-bordered h-48 max-w-full" id="description"
+              name="about-yourself" maxlength="500"
+              placeholder="Ensure the text exceeds 250 characters for a stronger impact." required></textarea>
+            <label class="label">
+              <span class="label-text-alt">Characters: <span class="charcount"></span></span>
+              <span class="label-text-alt">
+                <tag class="remainingLabe">Remaining:</tag>
+                <span class="remaining"></span>
+              </span>
+              <span class="label-text-alt text-error less" style="display: none">Less than 250</span>
+            </label>
+          </div>
+        </div>
+        <div class="w-full flex flex-wrap -mx-2 mb-4 tableHead">
+          <!-- Row 1: Headers -->
+          <div class="input-row w-full flex -mx-2 mb-4">
+            <div class="w-full sm:w-1/4 px-2"></div>
+            <div class="w-full sm:w-1/4 px-2">
+              <h3 class="text-xl font-bold mb-2">Essential</h3>
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <h3 class="text-xl font-bold mb-2">Standard</h3>
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <h3 class="text-xl font-bold mb-2">Premium</h3>
+            </div>
+          </div>
+
+          <!-- Row 2: Price -->
+          <div class="input-row w-full flex -mx-2 mb-4">
+            <div class="w-full sm:w-1/4 px-2">
+              <label class="label" for="price-Essential">Price</label>
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)"required type="number" id="price" name="price"
+                class="input input-bordered w-full" placeholder="Enter price" title="Enter price" />
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)"required type="number" id="price" name="price"
+                class="input input-bordered w-full" placeholder="Enter price" title="Enter price" />
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)"required type="number" id="price" name="price"
+                class="input input-bordered w-full" placeholder="Enter price" title="Enter price" />
+            </div>
+          </div>
+          <div class="input-row w-full flex -mx-2 mb-4">
+            <div class="w-full sm:w-1/4 px-2">
+              <label class="label" for="Turnaround">Delivery days</label>
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)" type="number" id="Turnaround"
+                name="Turnaround" class="input input-bordered w-full" placeholder="Enter Number of days"
+                title="Enter Number of days" />
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)" type="number" id="Turnaround"
+                name="Turnaround" class="input input-bordered w-full" placeholder="Enter Number of days"
+                title="Enter Number of days" />
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)" type="number" id="Turnaround"
+                name="Turnaround" class="input input-bordered w-full" placeholder="Enter Number of days"
+                title="Enter Number of days" />
+            </div>
+          </div>
+          <div class="input-row w-full flex -mx-2 mb-4">
+            <div class="w-full sm:w-1/4 px-2">
+              <label class="label" for="Revisions">Free Revisions</label>
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)" type="number" id="Revisions" name="Revisions"
+                class="input input-bordered w-full" placeholder="Enter Number of Revisions"
+                title="Enter Number of Revisions" />
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)" type="number" id="Revisions" name="Revisions"
+                class="input input-bordered w-full" placeholder="Enter Number of Revisions"
+                title="Enter Number of Revisions" />
+            </div>
+            <div class="w-full sm:w-1/4 px-2">
+              <input required oninput="proview(), enforceMaxLength(this)" type="number" id="Revisions" name="Revisions"
+                class="input input-bordered w-full" placeholder="Enter Number of Revisions"
+                title="Enter Number of Revisions" />
+            </div>
+          </div>
+        </div>
+        <div class="w-full px-2 mb-4">
+          <button onclick="appendinputs(this)" class="btn btn-ghost w-full add">
+            +
+          </button>
+        </div>
+        <div class="w-full px-2 mb-4">
+          <div class="form-control">
+            <label class="label" for="images">Catalogue Images (Max 5)</label>
+            <div class="flex flex-wrap gap-2">
+              <input required oninput="setTimeout(() => {
+                proview()
+              }, 100);" type="file" id="images" name="images[]" class="file-input file-input-bordered w-full w-full"
+                multiple accept="image/*" />
+              <br />
+              <div id="image-preview" class="flex flex-row flex-wrap gap-4 w-70"></div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full px-2 mb-4">
+          <div class="form-control">
+            <label class="label" for="tags">Tags (Max 10)</label>
+            <div class="showtags flex flex-row flex-wrap tags-preview" style="margin: 10px"></div>
+
+            <div class="tokenfield">
+              <input required type="text" id="tags" name="tags" class="input input-bordered w-full"
+                data-role="tagsinput" placeholder="Add tags relevant to your Catalogue and press enter."
+                title="Add tags relevant to your Catalogue and press enter." onkeydown="handleKeyDown(event)" />
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full px-2">
+          <button class="btn btn-ghost" onclick="closeform()">Cancel</button>
+          <button id="submit-button" type="submit" class="btn btn-primary">
+            <!-- Submit Catalogue -->
+            Next
+          </button>
+        </div>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/cdn.min.js"></script>
+    <div class="pro container w-auto px-4 mt-8">
+      <h1 class="text-3xl font-bold mb-4">Preview</h1>
+
+      <div class="card bg-base-100 shadow-xl w-80 reqimg" onmouseleave="hide(this)" onmouseenter="show(this)"
+        data-c="320">
+        <div class="after" onclick="next(this)">↪</div>
+        <div class="before" onclick="back(this)">↩</div>
+        <figure class="relative">
+          <div class="slideshow">
+            <img src="https://generated.vusercontent.net/placeholder.svg" data-num="2" alt="Product Image"
+              class="rounded-t-box w-full h-48 object-cover" />
+          </div>
+          <button class="btn btn-circle btn-ghost absolute top-2 right-2 heart" onclick="like(this)">
+            <i class="fa-regular fa-heart" style="background-color: transparent; color: #e2e2e2"></i>
+            <i class="fa-solid fa-heart text-red-500" style="background-color: transparent"></i>
+          </button>
+        </figure>
+        <div class="card-body" style="border-radius: 14px">
+          <h4 class="card-title">
+            <span class="ti" style="font-size: 17px">Catalogue title</span>
+            <sup class="badge badge-secondary">NEW</sup>
+          </h4>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="avatar online">
+                <div class="w-8 rounded-full">
+                  <img onclick="openit(this)" src="{{image}}" />
+                </div>
+              </div>
+
+              <span class="ml-2 text-sm font-semibold ti">{{name}}</span>
+            </div>
+          </div>
+          <div class="card-actions justify-between mt-4">
+            <div class="badge badge-lg">0 orders</div>
+            <div class="text-base-content font-semibold">
+              <span class="text-gray-500">Starting at:</span>
+              <span class="text-lg ti" style="width: 70px">$0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <input type="checkbox" id="my_modal_6" class="modal-toggle" />
+  <div class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Select Input Type</h3>
+      <div class="py-4 flex flex-col items-center">
+        <label for="my_modal_6" id="checkboxBtn" onclick="doit('checkbox')" class="w-full btn btn-ghost mb-2">Checkbox
+        </label>
+        <label for="my_modal_6" id="numberBtn" onclick="doit('number')" class="w-full btn btn-ghost mb-2">Number</label>
+        <label for="my_modal_6" id="textBtn" onclick="doit('text')" class="w-full btn btn-ghost mb-2">Text</label>
+      </div>
+      <div id="inputContainer" class="form-control"></div>
+      <div class="modal-action">
+        <label for="my_modal_6" class="btn btn-warning">Close</label>
+      </div>
+    </div>
+  </div>
+
+<div class="ask">
+
+  <div style="border-radius: 13px;" class="form-container mx-auto my-8 p-4 bg-white shadow-md">
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold tb-green">Information Required from Client.</h1>
+        <p style="text-align: center; opacity: 0.7; color: #000000a8;">Formulate questions to ensure you fully
+            understand the client's needs.</p>
+    </div>
+    <form id="questionForm" class="flex flex-col flex-grow">
+        <div id="questionContainer" class="flex-grow overflow-y-auto mb-6">
+            <div class="form-group">
+                <input type="text" placeholder="Enter your question" class="form-control">
+                <div class="checkbox-container">
+                    <input id="first" type="checkbox" class="form-check-input">
+                    <label for="first" class="form-check-label">Required</label>
+                </div>
+            </div>
+            <!-- Questions will be dynamically added here -->
+        </div>
+        <div class="flex justify-between items-center gap-2 mt-auto">
+            <div class="w-full">
+                <button type="button" class="button btn btn-success bg-green-100 tb-green w-full" id="addQuestionBtn"
+                    onclick="addQuestion()">Add Question</button>
+            </div>
+            <div>
+                <button type="submit" class="button btn btn-success tb-green">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</div>
+
+
+  <script>
+    let catalogue_id = ''
+    let transforid = ''
+    function place(x) {
+      const queryString = window.location.search;
+
+      if (queryString) {
+        const urlParams = new URLSearchParams(queryString);
+        const userParam = urlParams.get("here");
+
+        if (userParam) {
+          details(x);
+        } else {
+          const channel = new BroadcastChannel("live.TurboLancer");
+          channel.postMessage(x);
+        }
+      } else {
+        const channel = new BroadcastChannel("live.TurboLancer");
+        channel.postMessage(x);
+      }
+    }
+
+
+    function openform() {
+      const main = document.querySelector("main");
+      const a = document.createElement('a')
+        a.href = '#'
+        a.style.visibility = 'hidden'
+        a.click()
+        a.remove()
+      main.scrollTop = main.scrollHeight - main.scrollHeight;
+
+      main.style.display = "flex";
+      main.classList.add("show");
+    }
+    function closeform() {
+      const main = document.querySelector("main");
+      main.classList.remove("show");
+      setTimeout(() => {
+        main.style.display = "none";
+      }, 400);
+    }
+    const imagePreview = document.getElementById("image-preview");
+
+    function make() {
+      $("#image-preview").sortable({
+        update: function (event, ui) {
+          const computedStyle = window.getComputedStyle(
+            document.querySelector("#image-preview"),
+            null
+          );
+          document.querySelector("#image-preview").style.height =
+            computedStyle.getPropertyValue("height");
+          getIdsOfImages();
+          proview();
+          document.querySelector("#image-preview").style.height = "auto";
+        },
+      });
+    }
+
+    function getIdsOfImages() {
+      var values = [];
+      $("img").each(function (index) {
+        var imageId = $(this).attr("id");
+        if (imageId && imageId.startsWith("imageNo")) {
+          values.push(imageId.replace("imageNo", ""));
+        }
+      });
+      $("#outputvalues").val(values);
+    }
+
+    function insert() {
+      const div = document.querySelector("#category_Items");
+      OFC().forEach((item) => {
+        const option = document.createElement("option");
+        option.innerText = item;
+        div.appendChild(option);
+      });
+    }
+    insert();
+    function dellit() {
+      document.querySelector("#dellit").addEventListener("click", () => {
+        const element = document
+          .querySelector("#dellit")
+          .getAttribute("data-given");
+        const pId = document
+          .querySelector(`#${element}`)
+          .getAttribute("data-p");
+        console.log(pId);
+        form = new FormData();
+        form.append("id", pId);
+        fetch("/dell_catalogue", {
+          method: "POST",
+          body: form,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            toast("s", "Successfully Deleted");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          })
+          .catch((error) => {
+            toast("d", "An error occurred");
+          });
+      });
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function appendinputs(button) {
+      event.preventDefault();
+      button.disabled = true;
+      setTimeout(() => {
+        button.disabled = false;
+      }, 300);
+      const modalToggle = document.getElementById("my_modal_6");
+      const openModalBtn = document.getElementById("openModalBtn");
+      const inputContainer = document.getElementById("inputContainer");
+      modalToggle.checked = true;
+    }
+
+    function doit(inputType) {
+      const rows = document.querySelectorAll(".w-full.flex");
+      const len = rows.length + 1;
+
+      // Create a new row
+      const newRow = document.createElement("div");
+      newRow.className = "input-row w-full flex -mx-2 mb-4 newrow";
+
+      // Create heading for the new row
+      const headingColumn = document.createElement("div");
+      headingColumn.className = "w-full sm:w-1/4 px-2";
+      const headingLabel = document.createElement("label");
+      headingLabel.className = `label new-input-${len}`;
+      headingLabel.style.padding = "5px";
+      headingLabel.style.border = "none";
+      headingLabel.style.outline = "1px solid lightgray";
+      headingLabel.style.borderRadius = "6px";
+      headingLabel.contentEditable = true;
+      headingLabel.innerText = "Click here to edit";
+      headingColumn.appendChild(headingLabel);
+      newRow.appendChild(headingColumn);
+
+      // Create three input fields based on the selected input type
+      for (let i = 0; i < 3; i++) {
+        const column = document.createElement("div");
+        column.className = "w-full sm:w-1/4 px-2";
+
+        const inputContainer = document.createElement("div");
+        inputContainer.className = "flex items-center justify-between";
+
+        let input;
+        switch (inputType) {
+          case "checkbox":
+            input = document.createElement("input");
+            input.type = "checkbox";
+            input.id = `new-input-${len}-${i}`;
+            input.className = "checkbox checkbox-lg checkbox-success";
+            break;
+          case "number":
+            input = document.createElement("input");
+            input.type = "number";
+            input.addEventListener("input", () => {
+              enforceMaxLength(input);
+            });
+            input.id = `new-input-${len}-${i}`;
+            input.className = "input input-bordered w-full";
+            input.placeholder = "Enter number";
+            break;
+          case "text":
+            input = document.createElement("input");
+            input.type = "text";
+            input.id = `new-input-${len}-${i}`;
+            input.className = "input input-bordered w-full";
+            input.placeholder = "Enter text";
+            break;
+        }
+
+        inputContainer.appendChild(input);
+        column.appendChild(inputContainer);
+        newRow.appendChild(column);
+      }
+
+      // Create a clear button for the row
+      const clearButton = document.createElement("button");
+      clearButton.className = "btn btn-danger";
+      clearButton.innerText = "x";
+      clearButton.id = "clear";
+      clearButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        newRow.classList.add("end");
+        setTimeout(() => {
+          newRow.remove();
+        }, 450);
+      });
+      newRow.appendChild(clearButton);
+
+      // Append the new row to the existing rows
+      const rowContainer = document.querySelector(
+        ".w-full.flex.flex-wrap.-mx-2.mb-4"
+      );
+      rowContainer.appendChild(newRow);
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    let disableTimeout;
+    const MAX_TAGS = 10;
+    const MAX_CHARACTERS = 40;
+
+    function handleKeyDown(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        const tagInput = event.target;
+        const tagValue = tagInput.value.trim();
+        if (tagValue && tagValue.length <= MAX_CHARACTERS) {
+          appendTag(tagValue);
+          tagInput.value = "";
+        } else if (tagValue.length > MAX_CHARACTERS) {
+          toast("w", `Tag cannot exceed ${MAX_CHARACTERS} characters.`);
+        }
+      }
+    }
+
+    function appendTag(tagValue) {
+      const showTagsDiv = document.querySelector(".showtags");
+      const tags = showTagsDiv.querySelectorAll(".badge");
+
+      if (tags.length >= MAX_TAGS) {
+        toast("w", `Maximum ${MAX_TAGS} tags allowed.`);
+        return;
+      }
+
+      const tagElement = document.createElement("div");
+      tagElement.classList.add("badge", "badge-primary", "mr-2", "mb-2");
+      tagElement.textContent = tagValue;
+      tagElement.addEventListener(
+        "mouseover",
+        () => (tagElement.style.backgroundColor = "red")
+      );
+      tagElement.addEventListener(
+        "mouseout",
+        () => (tagElement.style.backgroundColor = "")
+      );
+      tagElement.addEventListener("click", () => removeTag(tagElement));
+      tagElement.id = "tag";
+      showTagsDiv.appendChild(tagElement);
+    }
+
+    function removeTag(tagElement) {
+      const showTagsDiv = document.querySelector(".showtags");
+      const tags = showTagsDiv.querySelectorAll(".badge");
+
+      tagElement.remove();
+
+      disableTags(tags, true);
+      disableTimeout = setTimeout(() => disableTags(tags, false), 700);
+    }
+
+    function disableTags(tags, disable) {
+      tags.forEach((tag) => {
+        tag.style.pointerEvents = disable ? "none" : "auto";
+        tag.style.opacity = disable ? "0.5" : "1";
+      });
+    }
+    function enforceMaxLength(input) {
+      if (input.value.length > 4) {
+        toast("w", "Cannot add larger value!");
+        input.disabled = true;
+
+        setTimeout(() => {
+          input.disabled = false;
+        }, 300);
+        input.value = input.value.slice(0, 4);
+        proview();
+      }
+    }
+    const imageInput = document.getElementById("images");
+
+    imageInput.addEventListener("change", function (event) {
+      const files = event.target.files;
+      for (let i = 0; i < Math.min(files.length, 5); i++) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = document.createElement("img");
+          const div = document.createElement("div");
+          const span = document.createElement("span");
+
+          img.style.borderRadius = "10px";
+          img.src = event.target.result;
+          img.onclick = function () {
+            openit(this);
+          };
+          img.classList.add("w-full", "h-40", "object-cover", "rounded");
+
+          div.classList.add("rounded", "imga");
+          div.id =
+            "imageNo" + (imagePreview.querySelectorAll("img").length + 1);
+
+          span.id = "closeit";
+          span.innerText = "x";
+
+          if (imagePreview.querySelectorAll("img").length > 4) {
+            toast("d", "Cannot add more than 5 images");
+          } else {
+            span.addEventListener("click", (event) => {
+              event.preventDefault();
+              div.classList.add("end");
+              setTimeout(() => {
+                div.remove();
+                proview();
+              }, 400);
+            });
+
+            div.appendChild(span);
+            div.appendChild(img);
+            imagePreview.appendChild(div);
+            make();
+          }
+        };
+
+        reader.readAsDataURL(files[i]);
+      }
+    });
+    function proview() {
+      const pro = document.querySelector(".pro");
+      const slideshowContainer = pro.querySelector(".slideshow");
+      slideshowContainer.innerHTML = "";
+
+      const inputImgs = document.querySelectorAll("#image-preview img");
+      const title = document.querySelector("#title").value;
+      const EssentialPrice = document.querySelectorAll("#price")[0].value;
+      const desc = document.querySelector("#description").value;
+
+      const cardTitle = pro.querySelector(".card-body .card-title span");
+      const sellerName = pro.querySelector(".card-body .avatar img");
+      const priceElement = pro.querySelector(
+        ".card-body .text-base-content .text-lg"
+      );
+      const ordersBadge = pro.querySelector(".card-body .badge");
+
+      cardTitle.textContent = title || "Catalogue title";
+      sellerName.src = "{{image}}";
+      priceElement.textContent = EssentialPrice ? `$${EssentialPrice}` : "$0";
+      ordersBadge.textContent = "NEW";
+
+      for (let i = 0; i < inputImgs.length; i++) {
+        const img = inputImgs[i].cloneNode(true);
+        img.setAttribute("data-num", i);
+        slideshowContainer.appendChild(img);
+      }
+
+      if (inputImgs.length === 0) {
+        const placeholderImg = document.createElement("img");
+        placeholderImg.src =
+          "https://generated.vusercontent.net/placeholder.svg";
+        placeholderImg.setAttribute("data-num", "1");
+        placeholderImg.setAttribute("alt", "Product Image");
+        placeholderImg.classList.add(
+          "rounded-t-box",
+          "w-full",
+          "h-48",
+          "object-cover"
+        );
+        slideshowContainer.appendChild(placeholderImg);
+      }
+    }
+
+    const SLIDE_WIDTH = 320;
+    const TRANSITION_DURATION = 100; // in milliseconds
+
+    function show(container) {
+      const afterElement = container.querySelector(".after");
+      const beforeElement = container.querySelector(".before");
+      const imgElements = container.querySelectorAll("img");
+      const imageCount = imgElements.length;
+
+      // Show the before and after elements
+      afterElement.style.display = "flex";
+      beforeElement.style.display = "flex";
+
+      // Add a delay for the transition effect
+      setTimeout(() => {
+        afterElement.classList.add("show");
+        beforeElement.classList.add("show");
+      }, TRANSITION_DURATION);
+
+      // Set data attributes for each image
+      imgElements.forEach((img, index) => {
+        img.setAttribute("data-num", index);
+      });
+
+      container.setAttribute("data-count", imageCount);
+    }
+
+    function hide(container) {
+      const afterElement = container.querySelector(".after");
+      const beforeElement = container.querySelector(".before");
+
+      // Hide the before and after elements
+      afterElement.classList.remove("show");
+      beforeElement.classList.remove("show");
+
+      // Add a delay for the transition effect
+      setTimeout(() => {
+        afterElement.style.display = "none";
+        beforeElement.style.display = "none";
+      }, TRANSITION_DURATION);
+    }
+
+    function scrollHorizontalByPixels(element, scrollAmount) {
+      if (element) {
+        element.scrollLeft += scrollAmount;
+      }
+    }
+
+    function next(button) {
+      const parent = button.parentElement;
+
+      const container = parent;
+      show(container);
+
+      let currentOffset = parseInt(parent.getAttribute("data-c"), 10) || 0;
+      const slideshow = parent.querySelector(".slideshow");
+      const imageCount = parseInt(parent.getAttribute("data-count"), 10);
+
+      if (currentOffset === imageCount * SLIDE_WIDTH) {
+        // If at the end of the slideshow, scroll back to the beginning
+        scrollHorizontalByPixels(slideshow, -currentOffset);
+        parent.setAttribute("data-c", 0);
+      } else {
+        // Otherwise, scroll to the next slide
+        scrollHorizontalByPixels(slideshow, SLIDE_WIDTH);
+        currentOffset += SLIDE_WIDTH;
+        parent.setAttribute("data-c", currentOffset);
+      }
+    }
+
+    function back(button) {
+      const parent = button.parentElement;
+
+      const container = parent;
+      show(container);
+
+      let currentOffset = parseInt(parent.getAttribute("data-c"), 10) || 0;
+      const slideshow = parent.querySelector(".slideshow");
+
+      if (currentOffset === 0) {
+        // If at the beginning of the slideshow, scroll to the end
+        const lastOffset =
+          (parseInt(parent.getAttribute("data-count"), 10) - 1) * SLIDE_WIDTH;
+        scrollHorizontalByPixels(slideshow, lastOffset);
+        parent.setAttribute("data-c", lastOffset);
+      } else {
+        // Otherwise, scroll to the previous slide
+        scrollHorizontalByPixels(slideshow, -SLIDE_WIDTH);
+        currentOffset -= SLIDE_WIDTH;
+        parent.setAttribute("data-c", currentOffset);
+      }
+    }
+    const clickDelays = new WeakMap();
+    const clickCounts = new WeakMap();
+    const maxClicks = 2;
+    const delay = 1000;
+
+    function like(button) {
+      if (!clickDelays.has(button)) {
+        clickDelays.set(button, 0);
+        clickCounts.set(button, 0);
+      }
+
+      const lastClickTime = clickDelays.get(button);
+      const currentTime = new Date().getTime();
+      const elapsedTime = currentTime - lastClickTime;
+      let clickCount = clickCounts.get(button);
+
+      if (elapsedTime >= delay && clickCount < maxClicks) {
+        button.classList.toggle("liked");
+        clickCount++;
+        clickCounts.set(button, clickCount);
+        clickDelays.set(button, currentTime);
+      }
+
+      if (clickCount === maxClicks) {
+        // Reset the click count after reaching the maximum limit
+        clickCounts.set(button, 0);
+      }
+    }
+
+    // Function to check if the textarea value exceeds the maximum length
+    function checkOverLimit(textarea, maxLength) {
+      const charCount = textarea.value.length;
+      const charCountElement = document.querySelector(".charcount");
+      const remainingElement = document.querySelector(".remaining");
+      const remainingLabel = document.querySelector(".remainingLabe");
+      const lessLabel = document.querySelector(".less");
+
+      charCountElement.innerHTML = `${charCount}/${maxLength}`;
+      const remainingChars = maxLength - charCount;
+      remainingElement.innerHTML = Math.abs(remainingChars);
+
+      if (charCount > maxLength) {
+        remainingLabel.classList.add("over");
+        remainingLabel.innerHTML = "exceeded by:";
+        remainingElement.classList.add("over");
+        textarea.style.color = "hsl(0, 80%, 60%)";
+        textarea.setAttribute("data-over", "true");
+        lessLabel.style.display = "none";
+      } else if (charCount < 250) {
+        remainingLabel.innerHTML = "Remaining:";
+        remainingElement.classList.remove("over");
+        textarea.style.color = "hsl(0, 80%, 60%)";
+        textarea.setAttribute("data-over", "false");
+        lessLabel.style.display = "block";
+      } else {
+        remainingLabel.innerHTML = "Remaining:";
+        remainingElement.classList.remove("over");
+        textarea.style.color = "hsl(0, 0%, 50%)";
+        textarea.setAttribute("data-over", "false");
+        lessLabel.style.display = "none";
+      }
+    }
+
+    // Function to initialize the textarea
+    function initializeTextarea() {
+ 
+      const textarea = document.querySelector("#description");
+      if (!textarea) return;
+
+      const maxLength = parseInt(textarea.getAttribute("maxlength"), 10);
+      const charCount = textarea.value.length;
+      const charCountElement = document.querySelector(".charcount");
+      const remainingElement = document.querySelector(".remaining");
+
+      charCountElement.innerHTML = `${charCount}/${maxLength}`;
+      remainingElement.innerHTML = maxLength - charCount;
+
+      checkOverLimit(textarea, maxLength);
+
+      textarea.addEventListener("input", () => {
+        checkOverLimit(textarea, maxLength);
+      });
+    }
+
+
+    initializeTextarea();
+    document
+      .getElementById("submit-button")
+      .addEventListener("click", collectAndSendData);
+
+    function collectAndSendData(event) {
+      event.preventDefault();
+      let formData = new FormData();
+      let inputLabels = [];
+      let inputValues = [];
+      const inputs = document.querySelectorAll('main input[type="text"], main input[type="number"]');
+let hasEmptyInput = false;
+
+for (const input of inputs) {
+
+  if (input.id !== 'tags' && input.value === '') {
+    hasEmptyInput = true;
+    toast('d','Kindly complete all required fields.');
+    break
+  }
+}
+if (!hasEmptyInput){
+      document.querySelectorAll(".input-row").forEach((element, rowIndex) => {
+        collectSectionData(element, inputLabels, inputValues, rowIndex);
+      });
+
+      formData.append("title", document.querySelector("#title").value);
+      formData.append("category", document.querySelector("#category").value);
+      formData.append(
+        "description",
+        document.querySelector("#description").value
+      );
+
+      let tags = Array.from(
+        document.querySelectorAll(".tags-preview #tag")
+      ).map((tag) => tag.textContent);
+      formData.append("tags", JSON.stringify(tags));
+
+      let imagesArray = []; // Array to store image files
+
+      // Function to fetch and convert images to base64
+      function fetchAndConvertImages(images, callback) {
+        let counter = 0;
+        images.forEach((element, index) => {
+          const imageUrl = element.src;
+          fetch(imageUrl)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const reader = new FileReader();
+              reader.onload = () => {
+                imagesArray[index] = new File([blob], `image${index}`, {
+                  type: blob.type,
+                });
+                counter++;
+                if (counter === images.length) {
+                  callback();
+                }
+              };
+              reader.readAsBinaryString(blob);
+            })
+            .catch((error) => console.error("Error fetching image:", error));
+        });
+      }
+
+      // Collect and convert images
+      fetchAndConvertImages(
+        document.querySelectorAll("#image-preview img"),
+        () => {
+          for (
+            let i = 0;
+            i < document.querySelectorAll("#image-preview img").length;
+            i++
+          ) {
+            formData.append("images", imagesArray[i]);
+          }
+          formData.append("inputLabels", JSON.stringify(inputLabels));
+          formData.append("inputValues", JSON.stringify(inputValues));
+
+          sendData(formData);
+        }
+      );
+    } }
+    function collectSectionData(section, inputLabels, inputValues, rowIndex) {
+      const labelElement = section.querySelector("label");
+      if (labelElement) {
+        const label = labelElement.textContent.trim();
+        const inputs = section.querySelectorAll("input");
+        inputs.forEach((input) => {
+          if (input.type === "checkbox") {
+            inputLabels.push(`${label}`);
+            inputValues.push(input.checked ? "Yes" : "No");
+          } else {
+            inputLabels.push(`${label}`);
+            inputValues.push(input.value);
+          }
+        });
+      }
+
+    }
+
+    function sendData(formData) {
+      document.body.classList.add('dis')
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      fetch("/catalogue/{{_id}}/{{d}}", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          toast("s", "Successfully uploaded");
+          transforid = data.catid
+          catalogue_id = data.catid
+          document.body.classList.remove('dis')
+
+          document.querySelector('.ask').style.display = 'flex'
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 1000);
+          closeform()
+        })
+        .catch((error) => {
+          document.body.classList.remove('dis')
+
+          console.error(error);
+          toast("d", "An error occurred");
+        });
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    let questionCount = 0;
+
+function addQuestion() {
+    const questionContainer = document.getElementById('questionContainer');
+
+    if (questionCount >= 10) {
+        toast('d','You have reached the maximum number of questions allowed (10).');
+        return;
+    }
+
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'form-group';
+    const randomString = generateRandomString(10);
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Enter your question';
+    input.className = 'form-control';
+    questionDiv.appendChild(input);
+
+    const optionDiv = document.createElement('div');
+    optionDiv.className = 'checkbox-container';
+
+    const optionInput = document.createElement('input');
+    optionInput.type = 'checkbox';
+    optionInput.id = randomString
+
+    optionInput.className = 'form-check-input';
+    optionDiv.appendChild(optionInput);
+
+    const optionLabel = document.createElement('label');
+    optionLabel.className = 'form-check-label';
+    optionLabel.textContent = 'Required';
+    optionLabel.setAttribute('for', randomString)
+    optionDiv.appendChild(optionLabel);
+
+    questionDiv.appendChild(optionDiv);
+
+    const removeQuestionIcon = document.createElement('span');
+    removeQuestionIcon.className = 'remove-question';
+    removeQuestionIcon.innerHTML = 'x';
+    removeQuestionIcon.addEventListener('click', function () {
+     questionDiv.classList.add('removing')
+     setTimeout(() => {
+         
+     
+        questionContainer.removeChild(questionDiv);
+        questionCount--;
+    }, 400);});
+    questionDiv.appendChild(removeQuestionIcon);
+
+    questionContainer.appendChild(questionDiv);
+
+    questionCount++;
+    questionContainer.scrollTop = questionContainer.scrollHeight - 400;
+
+}
+
+const questionForm = document.getElementById('questionForm');
+questionForm.addEventListener('submit', function (event) {
+
+
+    event.preventDefault();
+          document.body.classList.add('dis')
+    const questions = document.querySelectorAll('#questionContainer .form-group');
+    const formData = [];
+
+    questions.forEach(function (question) {
+        const questionText = question.querySelector('input[type="text"]').value;
+        const isRequired = question.querySelector('input[type="checkbox"]').checked;
+        formData.push({ question: questionText, required: isRequired });
+    });
+    fetch("/complete_catalogue/" + catalogue_id, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(formData),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    toast("s", "Successfully uploaded");
+    transforid = data.catid;
+    document.body.classList.remove("dis");
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    closeform();
+  })
+  .catch((error) => {
+    document.body.classList.remove("dis");
+    console.error(error);
+    toast("d", "An error occurred");
+  });
+
+    
+});
+  </script>
+</body>
+
+</html>

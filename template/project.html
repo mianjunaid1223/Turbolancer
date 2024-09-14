@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.8">
+<title>Freelancing Marketplace</title>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://kit.fontawesome.com/cfa490a0db.js" crossorigin="anonymous"></script>
+<style>
+  
+  .slideshow::-webkit-scrollbar-thumb {
+    background-color: transparent; 
+    border-radius: 6px; 
+  }
+  
+  /* Scrollbar track */
+  .slideshow::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+  
+  .slideshow::-webkit-scrollbar-corner {
+    background-color: transparent; 
+  }
+  .slideshow::-webkit-scrollbar {
+    width: 0px; 
+  }
+  
+  *{
+    transition: all 0.4s;
+    scroll-behavior:smooth !important;
+    text-wrap: balance;
+
+  }
+  .category {
+    max-height: 350px;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    display: grid !important;
+    grid-template-columns: 100% !important;
+  }
+input{
+  outline: none;
+}
+.ip{
+  margin-left: 30px !important;
+
+}
+ul li a:active{
+  background-color: #0fa60c !important;
+}
+
+.after {
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      background-color: #fff;
+      box-shadow: 0 5px 10px #0002;
+      position: absolute;
+      color: #000;
+      top: 18%;
+      right: 1%;
+      font-weight: bold;
+      font-size: 26px;
+      display: none;
+      justify-content: center;
+      z-index: 454;
+
+      align-items: center;
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.4s;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: pointer;
+
+    }
+
+    .after.show {
+      transform: translateX(0%);
+      opacity: 1;
+      transition: all 0.4s;
+    }
+
+    .before.show {
+
+      transform: translateX(0%);
+      opacity: 1;
+      transition: all 0.4s;
+
+    }
+    .before {
+      transition: all 0.4s;
+      display: none;
+      transform: translateX(-100%);
+      opacity: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      background-color: #fff;
+      box-shadow: 0 5px 10px #0002;
+      position: absolute;
+      z-index: 454;
+      color: #000;
+      top: 18%;
+      left: 1%;
+      font-weight: bold;
+      font-size: 26px;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: pointer;
+    }
+    .slideshow {
+  overflow-y: hidden;
+  overflow-x: auto;
+  width: 100%; 
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start; 
+  white-space: nowrap; 
+  scroll-snap-type: x mandatory;
+}
+
+.slideshow img {
+  border-radius: 17px 17px 0 0 ;
+  min-width: 100%;
+  min-height: 200px;
+  max-height: 200px;
+  scroll-snap-align: start;
+object-fit: fill;  
+}
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 50px;
+
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bababa;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bdbdbd;
+}
+
+
+
+.gridparent{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly !important;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.gridparent .card{
+  margin: 10px;
+  margin-top: 20px;
+}
+.heart{
+  font-size: 20px;
+  backdrop-filter: brightness(150%);
+}
+.heart .fa-regular, .heart.liked .fa-solid{
+display: block;}
+.heart .fa-solid, .heart.liked .fa-regular{
+display: none;}
+.heart:hover{
+  filter: brightness(120%);
+}
+.disc{
+  white-space: nowrap; 
+    text-align: center;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    width: 270px;
+    text-align: left;
+}
+</style>
+</head>
+<body>
+<div class="navbar bg-base-100 shadow-md rounded-box">
+  <div class="flex-1 ip">
+    <div class="form-control  w-full min-w-xs">
+      <label class="input input-bordered flex items-center gap-2  w-full max-w-xs">
+        <input type="text" class="grow" placeholder="Search" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
+      </label>    </div>
+  </div>
+  <div class="flex-none">
+    <div class="dropdown dropdown-end">
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+      </label>
+      <ul tabindex="0" class="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <li style="pointer-events: none;"><strong>Sort by:</strong></li>
+        <li><a><i class="fa-solid fa-arrow-up mr-2"></i>Price: Low to High</a></li>
+        <li><a><i class="fa-solid fa-arrow-down mr-2"></i>Price: High to Low</a></li>
+        <li><a><i class="fa-solid fa-heart mr-2" style="color: red;"></i>Most Liked</a></li>
+        <li><a><i class="fa-solid fa-fire mr-2"></i>Popular</a></li>
+        <li><a><i class="fa-solid fa-calendar-plus mr-2"></i>Newest</a></li>
+      </ul>
+    </div>
+    <div class="dropdown dropdown-end">
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+      </label>
+      <ul tabindex="0" class="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-60 category">  
+        <li  style="pointer-events: none; z-index: 2; position: sticky; top: -10px;background-color: #fff;"><strong>Filter by:</strong></li> 
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="flex gridparent" >
+  <div class="card bg-base-100 shadow-xl w-80 reqimg"onmouseleave="hide(this)"onmouseenter="show(this)"   data-c="320" >
+    <div class="after"  onclick="next(this)">↪</div>
+    <div class="before" onclick="back(this)">↩</div>
+    <figure class="relative">
+      <div class="slideshow">
+      <img src="/static/4543.png" data-num="1" alt="Product Image" class="rounded-t-box w-full h-48 object-cover"> <!-- Adjusted image size -->
+      <img src="/static/6krbcxk4.png" data-num="2" alt="Product Image" class="rounded-t-box w-full h-48 object-cover "> <!-- Adjusted image size -->
+      <img src="/static/banner.jpg" data-num="3" alt="Product Image" class="rounded-t-box w-full h-48 object-cover "> <!-- Adjusted image size -->
+      <img src="/static/bh.jpg
+      " data-num="3" alt="Product Image" class="rounded-t-box w-full h-48 object-cover "> <!-- Adjusted image size -->
+    </div>
+    <button class="btn btn-circle btn-ghost absolute top-2 right-2 heart " onclick="like(this)">
+      <i class="fa-regular fa-heart" style="color: #d1d1d1;"></i>
+      <i class="fa-solid fa-heart text-red-500"></i>
+  </button>
+  
+  
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title"> Product Name <div class="badge badge-secondary">NEW</div> </h2>
+      <p class="disc" title="TEXT">Product description goes here tttttttttttttttttttttttttttttttttttttttttttt</p>
+      <div class="card-actions justify-between">
+        <div class="badge badge-lg">Audio</div>
+        <div class="text-black  text-base-200 font-semibold" style="font-size: larger;"><bold>$40</bold></div>
+      </div>
+    </div>
+  </div>
+  <!-- Add more product cards here -->
+</div>
+
+<script>
+ window.onload = function (){
+    const categories = [
+        "Website Templates",
+        "Mobile App Templates",
+        "WordPress Themes",
+        "Shopify Themes",
+        "Game Templates",
+        "Graphic Design Bundles",
+        "Video Editing Templates",
+        "3D Model Packs",
+        "Printable Templates",
+        "Presentation Templates",
+        "Social Media Templates",
+        "Resume/CV Templates",
+        "Email Newsletter Templates",
+        "Infographic Templates",
+        "Business Card Templates",
+        "Educational Course Kits",
+        "Icon Packs",
+        "Font Bundles",
+        "Mockup Templates",
+        "Music Production Kits"
+    ];
+
+    const dropdown = document.querySelector('.category');
+
+    categories.forEach(category => {
+        dropdown.innerHTML += `<li><a>${category}</a></li>`;
+    });
+
+gridparent = document.querySelector('.gridparent')
+
+for (i = 0;i<=12;i++){
+  gridparent.innerHTML+=`  <div class="card bg-base-100 shadow-xl w-80 reqimg"onmouseleave="hide(this)"onmouseenter="show(this)"   data-c="320" >
+    <div class="after"  onclick="next(this)">↪</div>
+    <div class="before" onclick="back(this)">↩</div>
+    <figure class="relative">
+      <div class="slideshow">
+      <img src="/static/4543.png" data-num="1" alt="Product Image" class="rounded-t-box w-full h-48 object-cover"> <!-- Adjusted image size -->
+      <img src="/static/6krbcxk4.png" data-num="2" alt="Product Image" class="rounded-t-box w-full h-48 object-cover "> <!-- Adjusted image size -->
+      <img src="/static/banner.jpg" data-num="3" alt="Product Image" class="rounded-t-box w-full h-48 object-cover "> <!-- Adjusted image size -->
+      <img src="/static/bh.jpg
+      " data-num="3" alt="Product Image" class="rounded-t-box w-full h-48 object-cover "> <!-- Adjusted image size -->
+    </div>
+    <button class="btn btn-circle btn-ghost absolute top-2 right-2 heart " onclick="like(this)">
+      <i class="fa-regular fa-heart" style="color: #d1d1d1;"></i>
+      <i class="fa-solid fa-heart text-red-500"></i>
+  </button>
+  
+  
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title"> Product Name <div class="badge badge-secondary">NEW</div> </h2>
+      <p class="disc">Product description goes here...</p>
+      <div class="card-actions justify-between">
+        <div class="badge badge-lg">Audio</div>
+        <div class="text-black  text-base-200 font-semibold" style="font-size: larger;"><bold>$40</bold></div>
+      </div>
+    </div>
+  </div>`
+
+
+
+}
+
+}
+// Constants for better readability
+const SLIDE_WIDTH = 320;
+const TRANSITION_DURATION = 100; // in milliseconds
+
+function show(container) {
+  const afterElement = container.querySelector('.after');
+  const beforeElement = container.querySelector('.before');
+  const imgElements = container.querySelectorAll('img');
+  const imageCount = imgElements.length;
+
+  // Show the before and after elements
+  afterElement.style.display = 'flex';
+  beforeElement.style.display = 'flex';
+
+  // Add a delay for the transition effect
+  setTimeout(() => {
+    afterElement.classList.add('show');
+    beforeElement.classList.add('show');
+  }, TRANSITION_DURATION);
+
+  // Set data attributes for each image
+  imgElements.forEach((img, index) => {
+    img.setAttribute('data-num', index);
+  });
+
+  container.setAttribute('data-count', imageCount);
+}
+
+function hide(container) {
+  const afterElement = container.querySelector('.after');
+  const beforeElement = container.querySelector('.before');
+
+  // Hide the before and after elements
+  afterElement.classList.remove('show');
+  beforeElement.classList.remove('show');
+
+  // Add a delay for the transition effect
+  setTimeout(() => {
+    afterElement.style.display = 'none';
+    beforeElement.style.display = 'none';
+  }, TRANSITION_DURATION);
+}
+
+function scrollHorizontalByPixels(element, scrollAmount) {
+  if (element) {
+    element.scrollLeft += scrollAmount;
+  }
+}
+
+function next(button) {
+  const parent = button.parentElement;
+
+  const container = parent;
+  show(container);
+
+  let currentOffset = parseInt(parent.getAttribute('data-c'), 10) || 0;
+  const slideshow = parent.querySelector('.slideshow');
+  const imageCount = parseInt(parent.getAttribute('data-count'), 10);
+
+  if (currentOffset === (imageCount) * SLIDE_WIDTH) {
+    // If at the end of the slideshow, scroll back to the beginning
+    scrollHorizontalByPixels(slideshow, -currentOffset);
+    parent.setAttribute('data-c', 0);
+  } else {
+    // Otherwise, scroll to the next slide
+    scrollHorizontalByPixels(slideshow, SLIDE_WIDTH);
+    currentOffset += SLIDE_WIDTH;
+    parent.setAttribute('data-c', currentOffset);
+  }
+}
+
+function back(button) {
+  const parent = button.parentElement;
+
+  const container = parent;
+  show(container);
+
+  let currentOffset = parseInt(parent.getAttribute('data-c'), 10) || 0;
+  const slideshow = parent.querySelector('.slideshow');
+
+  if (currentOffset === 0) {
+    // If at the beginning of the slideshow, scroll to the end
+    const lastOffset = (parseInt(parent.getAttribute('data-count'), 10) - 1) * SLIDE_WIDTH;
+    scrollHorizontalByPixels(slideshow, lastOffset);
+    parent.setAttribute('data-c', lastOffset);
+  } else {
+    // Otherwise, scroll to the previous slide
+    scrollHorizontalByPixels(slideshow, -SLIDE_WIDTH);
+    currentOffset -= SLIDE_WIDTH;
+    parent.setAttribute('data-c', currentOffset);
+  }
+}
+const clickDelays = new WeakMap();
+const clickCounts = new WeakMap();
+const maxClicks = 2; 
+const delay = 1000; 
+
+function like(button) {
+  if (!clickDelays.has(button)) {
+    clickDelays.set(button, 0);
+    clickCounts.set(button, 0);
+  }
+
+  const lastClickTime = clickDelays.get(button);
+  const currentTime = new Date().getTime();
+  const elapsedTime = currentTime - lastClickTime;
+  let clickCount = clickCounts.get(button);
+
+  if (elapsedTime >= delay && clickCount < maxClicks) {
+    button.classList.toggle('liked');
+    clickCount++;
+    clickCounts.set(button, clickCount);
+    clickDelays.set(button, currentTime);
+  }
+
+  if (clickCount === maxClicks) {
+    // Reset the click count after reaching the maximum limit
+    clickCounts.set(button, 0);
+  }
+}
+</script>
+</body>
+</html>

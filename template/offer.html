@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="icon" type="image/png" href="/static/icon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="/static/tailwind.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <link rel="stylesheet" href="/static/toast.css" />
+  <script src="/static/toast.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+  <style>
+    input {
+      border-radius: 5px !important;
+      outline: none !important;
+      border: solid 1px rgb(0, 114, 2) !important;
+    }
+
+    .input-bordered.flex input {
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="w-full max-w-2xl mx-auto p-8">
+    <h1 class="text-2xl font-bold mb-4"> Create an Offer </h1>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Title</span>
+      </label>
+      <input type="text" placeholder="Enter title" id="title" class="input input-bordered " />
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Price</span>
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        $ <input type="number" class="grow" id="Price" placeholder="Enter price" />
+      </label>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Description</span>
+      </label>
+      <div class="flex">
+        <textarea class="textarea textarea-bordered flex-grow" id="offer_disc"
+          placeholder="Enter description"></textarea>
+        <div class="btn-group ml-2">
+          <div style="padding: 1px;"><a onclick="run(this)" data-id="offer_disc" class="tb_ai-button texta"><span
+                class="first"> Rephrase
+                it!</span><span class="second">
+                <strong class="iconAi">✨</strong>
+              </span></a></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Free Revisions</span>
+      </label>
+      <input type="number" placeholder="Enter free revisions" id="revisions" class="input input-bordered" />
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Delivery Days</span>
+      </label>
+      <input type="number" placeholder="Enter delivery days" id="Delivery" class="input input-bordered" />
+    </div>
+    <button type="submit" class="btn btn-success bg-green-400 mt-4" style="color: #fff;">Send offer </button>
+  </div>
+  <script>
+
+    document.querySelector('button').onclick = () => {
+      const title = document.querySelector('#title').value
+      const Price = document.querySelector('#Price').value
+      const Description = document.querySelector('#offer_disc').value
+      const revisions = document.querySelector('#revisions').value
+      const Delivery = document.querySelector('#Delivery').value
+      const embading = '[<>===pvsi{turbolancer}===<>]'
+      messag = title + embading + Price + embading + Description + embading + revisions + embading + Delivery
+      const br = new BroadcastChannel('bid')
+      br.postMessage(messag)
+    }
+
+  </script>
+</body>
+
+</html>
