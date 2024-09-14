@@ -1,6 +1,4 @@
-# romE2I69nPailBx4S8agYb09En3XPhhVJXnE74qChVS sandbox api
-# set CLOUDINARY_URL=cloudinary://489474321839884:82k4ZB3pAQWVtZSzfdHHLMpo0QM@dfew09nzc
-# romE2I69nPailBx4S8agYb09En3XPhhVJXnE74qChVS sandbox api
+
 import os
 import re
 import io
@@ -42,7 +40,7 @@ env = Environment(loader=FileSystemLoader("template"))
 
 # Connect to MongoDB
 client = MongoClient(
-    "mongodb+srv://junaidiqbal:allahsadaro@junaid.lkpmjko.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://*******************************.lkpmjko.mongodb.net/?retryWrites=true&w=majority"
 )
 db = client["Tasker"]
 key = b'||/:?"(:@junaid)'
